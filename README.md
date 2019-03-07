@@ -1,4 +1,8 @@
-# hello-world
+# switchart-ui
+
+Migrating SwitchArt.tk using an api + Vuejs front end. 
+
+This is said front end. 
 
 ## Project setup
 ```
