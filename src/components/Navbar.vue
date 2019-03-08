@@ -1,31 +1,36 @@
 <template>
-    <nav class="navbar is-black" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <router-link class="navbar-item" to="/">
-                <img src="../assets/logo.png">
-            </router-link>
-            
-            <a
-                role="button"
-                class="navbar-burger burger"
-                aria-label="menu"
-                aria-expanded="false"
-                data-target="navbarBasicExample"
-                v-bind:class="[active ? activeClass : '']"
-                @click="toggleNav()"
-            >
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
-        </div>
+    <div>
+        <nav class="navbar is-black" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <router-link class="navbar-item" to="/">
+                    <img src="../assets/logo.png">
+                </router-link>
 
-        <div class="navbar-menu" v-bind:class="[active ? activeClass : '']">
-            <div class="navbar-start">
-                <router-link class="navbar-item" to="/about">Go to Foo</router-link> 
-                <!-- <a class="navbar-item">Documentation</a> -->
+                <a
+                    role="button"
+                    class="navbar-burger burger"
+                    aria-label="menu"
+                    aria-expanded="false"
+                    data-target="navbarBasicExample"
+                    v-bind:class="[active ? activeClass : '']"
+                    @click="toggleNav()"
+                >
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
 
-                <div class="navbar-item has-dropdown is-hoverable">
+            <div class="navbar-menu" v-bind:class="[active ? activeClass : '']">
+                <div class="navbar-start">
+                    <router-link @click.native="closeNav()" class="navbar-item" to="/games">Games</router-link>
+                    <router-link
+                        @click.native="closeNav()"
+                        class="navbar-item"
+                        to="/user/kalenpw"
+                    >Account</router-link>
+                    <!-- <a class="navbar-item">Documentation</a> -->
+                    <!-- <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">More</a>
 
                     <div class="navbar-dropdown">
@@ -35,41 +40,79 @@
                         <hr class="navbar-divider">
                         <a class="navbar-item">Report an issue</a>
                     </div>
+                    </div>-->
                 </div>
-            </div>
 
-            <div class="navbar-end">
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <a class="button is-primary">
-                            <strong>Sign up</strong>
-                        </a>
-                        <a class="button is-light">Log in</a>
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <div class="buttons">
+                            <a @click="registerModal()" class="button is-primary">
+                                <strong>Sign up</strong>
+                            </a>
+                            <a @click="loginModal()" class="button is-light">Log in</a>
+                        </div>
                     </div>
                 </div>
             </div>
+        </nav>
+
+        <div v-if="showForm" class="modal is-active">
+            <div @click="showForm = false" class="modal-background"></div>
+            <div class="modal-content">
+                <div class="box">
+                    <div v-if="showRegister">
+                        <Register></Register>
+                    </div>
+                    <div v-if="showLogin">
+                        <Login></Login>
+                    </div>
+                </div>
+                <!-- Any other Bulma elements you want -->
+            </div>
+            <button @click="showForm = false" class="modal-close is-large" aria-label="close"></button>
         </div>
-    </nav>
+    </div>
 </template>
 
 <script>
+import Register from "@/components/forms/Register.vue";
+import Login from "@/components/forms/Login.vue";
 export default {
+    components: {
+        Register,
+        Login
+    },
     name: "Navbar",
     props: {
         msg: String
     },
-    data(){
+    data() {
         return {
             active: false,
-            activeClass: "is-active"
-        }
+            activeClass: "is-active",
+            showRegister: false,
+            showLogin: false,
+            showForm: false
+        };
     },
-    methods:{
-        toggleNav(){
-            this.active = ! this.active;
+    methods: {
+        toggleNav() {
+            this.active = !this.active;
+        },
+        closeNav() {
+            this.active = false;
+        },
+        registerModal() {
+            this.showLogin = false;
+            this.showForm = true;
+            this.showRegister = true;
+        },
+        loginModal() {
+            this.showRegister = false;
+            this.showForm = true;
+            this.showLogin = true;
         }
     }
-
 };
 </script>
 

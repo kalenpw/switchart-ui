@@ -12,6 +12,8 @@
 
 <script>
 import Game from "./Game.vue";
+import allGames from "../assets/games.js";
+
 export default {
     components: {
         Game
@@ -25,19 +27,7 @@ export default {
 
     data() {
         return {
-            games: [
-                {
-                    name: "Splatoon 2",
-                    description: "Squid frenzy",
-                    image:
-                        "http://switchart.tk/images/Backgrounds/Splatoon_2.jpg"
-                },
-                {
-                    name: "Arms",
-                    description: "Dumb shit",
-                    image: "http://switchart.tk/images/Backgrounds/Arms.jpg"
-                }
-            ]
+            games: allGames
         };
     },
     computed: {
