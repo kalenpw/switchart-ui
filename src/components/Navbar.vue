@@ -2,7 +2,7 @@
     <div>
         <nav class="navbar is-black" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-                <router-link class="navbar-item" to="/">
+                <router-link @click.native="closeNav()" class="navbar-item" to="/">
                     <img src="../assets/logo.png">
                 </router-link>
 

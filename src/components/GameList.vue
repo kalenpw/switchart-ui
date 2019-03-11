@@ -1,18 +1,14 @@
 <template>
-    <div class="columns">
-        <div class="column" v-for="game in games" :key="game.name">
-            <game
-                :name="game.name"
-                :description="game.description" 
-                :image="game.image"
-            ></game>
+    <div class="columns is-multiline">
+        <div class="column" v-for="game in this.orderedGames" :key="game.name">
+            <game :name="game.title" :description="game.description" :image="game.background_url"></game>
         </div>
     </div>
 </template>
 
 <script>
 import Game from "./Game.vue";
-import allGames from "../assets/games.js";
+import axios from "axios";
 
 export default {
     components: {
@@ -27,14 +23,21 @@ export default {
 
     data() {
         return {
-            games: allGames
+            games: null,
+            api_url: "http://localhost:8000"
         };
     },
     computed: {
-        imageUrl() {}
+        orderedGames() {
+            return this.games;
+        }
     },
 
-    mounted() {},
+    mounted() {
+        axios
+            .get(this.api_url + "/api/games")
+            .then(response => (this.games = response.data));
+    },
 
     methods: {}
 };
