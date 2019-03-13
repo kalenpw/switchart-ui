@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>viewing user: </h1>
-        {{$route.params.id}}
+        {{username}}
     </div>
 </template>
 
@@ -13,7 +13,13 @@ export default {
     },
     data(){
         return{
-            username: ''
+        }
+    },
+    computed:{
+        username(){
+            if(this.$route.params.id === localStorage.username){
+                return localStorage.username;
+            }
         }
     },
     mounted(){

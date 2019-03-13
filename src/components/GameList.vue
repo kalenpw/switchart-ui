@@ -1,6 +1,6 @@
 <template>
     <div class="columns is-multiline">
-        <div class="column" v-for="game in this.orderedGames" :key="game.name">
+        <div class="column is-one-quarter" v-for="game in topRecent" :key="game.name">
             <game :name="game.title" :description="game.description" :image="game.background_url"></game>
         </div>
     </div>
@@ -9,6 +9,7 @@
 <script>
 import Game from "./Game.vue";
 import axios from "axios";
+import {dateSort} from "@/Utils/sorting-utils.js";
 
 export default {
     components: {
@@ -20,23 +21,28 @@ export default {
         description: String,
         image: String
     },
-
     data() {
         return {
             games: null,
-            api_url: "http://localhost:8000"
+            gameArray: [],
+            unmodifiedGames: []
         };
     },
     computed: {
-        orderedGames() {
-            return this.games;
+        topRecent(){
+            this.games = this.unmodifiedGames.sort(dateSort);
+            return this.games.slice(0, 8);
         }
     },
 
     mounted() {
-        axios
-            .get(this.api_url + "/api/games")
-            .then(response => (this.games = response.data));
+        axios.get(this.$hostname + "/api/games").then(response => {
+            this.games = response.data;
+            for (let i in this.games) {
+                this.gameArray.push(this.games[i]);
+            }
+            this.unmodifiedGames = this.gameArray;
+        });
     },
 
     methods: {}

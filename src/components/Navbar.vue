@@ -25,10 +25,11 @@
                 <div class="navbar-start">
                     <router-link @click.native="closeNav()" class="navbar-item" to="/games">Games</router-link>
                     <router-link
+                        v-if="isLoggedIn"
                         @click.native="closeNav()"
+                        :to="'/user/' + username"
                         class="navbar-item"
-                        to="/user/kalenpw"
-                    >Account</router-link>
+                    >{{username}}</router-link>
                     <!-- <a class="navbar-item">Documentation</a> -->
                     <!-- <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">More</a>
@@ -77,6 +78,10 @@
 <script>
 import Register from "@/components/forms/Register.vue";
 import Login from "@/components/forms/Login.vue";
+import {EventBus} from "@/event-bus.js";
+// EventBus.$on('logged-in', ()=>{
+//     console.log("log in herd");
+// });
 export default {
     components: {
         Register,
@@ -92,8 +97,12 @@ export default {
             activeClass: "is-active",
             showRegister: false,
             showLogin: false,
-            showForm: false
+            showForm: false,
+            username: '',
+            isLoggedIn: false
         };
+    },
+    computed: {
     },
     methods: {
         toggleNav() {
@@ -112,6 +121,17 @@ export default {
             this.showForm = true;
             this.showLogin = true;
         }
+    },
+    created(){
+        EventBus.$on('logged-in', () =>{
+            console.log("log in triggered");
+            this.username = localStorage.getItem('username');
+            this.isLoggedIn = true;
+            this.closeNav();
+            this.showForm = false;
+            this.showLogin = false;
+            this.showRegister = false;
+        });
     }
 };
 </script>

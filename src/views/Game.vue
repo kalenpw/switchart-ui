@@ -16,13 +16,12 @@ export default {
     components: {},
     data() {
         return {
-            api_url: "http://localhost:8000",
             game: null
         };
     },
     mounted() {
         axios
-            .get(this.api_url + "/api/games/name/" + this.$route.params.id)
+            .get(this.$hostname + "/api/games/name/" + this.$route.params.id)
             .then(response => (this.game = response.data));
     }
 };
