@@ -1,6 +1,7 @@
 <template>
     <div class="home">
         <GameList></GameList>
+        <button @click="test">A</button>
     </div>
 </template>
 
@@ -12,6 +13,23 @@ export default {
     name: "home",
     components: {
         GameList
-    }
+    },
+    methods:{
+        test(){
+            this.$http
+                .post(this.$hostname + "/api/test", {
+                    token: localStorage.getItem('jwt'),
+                    name: 'Splatoon 2',
+                    description: 'Squidy fun'
+                })
+                .then(response => {
+                    console.log(response.data);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+
+        }
+    },
 };
 </script>

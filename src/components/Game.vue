@@ -25,7 +25,6 @@ export default {
     props: {
         name: String,
         description: String,
-        image: String
     },
 
     data() {
@@ -33,7 +32,14 @@ export default {
     },
     computed: {
         imageUrl() {
+            // console.log(this.name);
+            // return this.name;
             return this.name.replace(/ /g, '_').replace(/\W/g, '');
+        },
+        image(){
+            let formattedName = this.name.replace(/ /g, '_').replace(/\W/g, '');
+            return "http://switchart.tk/images/Backgrounds/" + formattedName + ".jpg";
+
         }
     },
 

@@ -1,14 +1,19 @@
 <template>
     <form>
         <h2 class="title">Login</h2>
+
         <div class="field">
-            <p class="control has-icons-left">
-                <input class="input" type="input" placeholder="Username" name="username" v-model="username">
+            <p class="control has-icons-left has-icons-right">
+                <input class="input" type="email" placeholder="Email" v-model="email">
                 <span class="icon is-small is-left">
-                    <i class="fas fa-user"></i>
+                    <i class="fas fa-envelope"></i>
+                </span>
+                <span class="icon is-small is-right">
+                    <i class="fas fa-check"></i>
                 </span>
             </p>
         </div>
+
         <div class="field">
             <p class="control has-icons-left">
                 <input class="input" type="password" placeholder="Password" name="password" v-model="password">
@@ -34,19 +39,20 @@ export default {
     components: {},
     data() {
         return {
-            username: '',
+            email: '',
             password: ''
         };
     },
     methods: {
         submitLogin() {
-            axios
-                .post(this.$hostname + "/api/users/login", {
-                    username: this.username,
+            this.$http
+                .post(this.$hostname + "/api/login", {
+                    email: this.email,
                     password: this.password
                 })
                 .then(response => {
-                    localStorage.setItem('username', response.data.username);
+                    console.log(response.data);
+                    localStorage.setItem('jwt', response.data.access_token);
                     EventBus.$emit('logged-in');
                 })
                 .catch(function(error) {

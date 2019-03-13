@@ -1,14 +1,14 @@
 <template>
     <div class="columns is-multiline">
         <div class="column is-one-quarter" v-for="game in topRecent" :key="game.name">
-            <game :name="game.title" :description="game.description" :image="game.background_url"></game>
+            <!-- <game :name="game.title" :description="game.description" :image="game.background_url"></game> -->
+            <game :name="game.name" :description="game.description"></game>
         </div>
     </div>
 </template>
 
 <script>
 import Game from "./Game.vue";
-import axios from "axios";
 import {dateSort} from "@/Utils/sorting-utils.js";
 
 export default {
@@ -36,7 +36,8 @@ export default {
     },
 
     mounted() {
-        axios.get(this.$hostname + "/api/games").then(response => {
+
+        this.$http.get(this.$hostname + "/api/games/").then(response => {
             this.games = response.data;
             for (let i in this.games) {
                 this.gameArray.push(this.games[i]);

@@ -125,12 +125,13 @@ export default {
     created(){
         EventBus.$on('logged-in', () =>{
             console.log("log in triggered");
-            this.username = localStorage.getItem('username');
-            this.isLoggedIn = true;
-            this.closeNav();
-            this.showForm = false;
-            this.showLogin = false;
-            this.showRegister = false;
+            console.log(localStorage.getItem('jwt'));
+            // this.username = localStorage.getItem('username');
+            // this.isLoggedIn = true;
+            // this.closeNav();
+            // this.showForm = false;
+            // this.showLogin = false;
+            // this.showRegister = false;
         });
     }
 };

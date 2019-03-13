@@ -1,10 +1,10 @@
 <template>
     <div class="home">
         <h1>Viewing game:</h1>
-        {{ game.title }}
+        {{ game.name }}
         <h2></h2>
         {{game.description}}
-        <img v-bind:src="game.background_url" v-bind:alt="game.name">
+        <img v-bind:src="imageUrl" v-bind:alt="game.name">
     </div>
 </template>
 
@@ -19,10 +19,19 @@ export default {
             game: null
         };
     },
+    computed: {
+        imageUrl() {
+            console.log(this.game);
+            return this.game.name.replace(/ /g, "_").replace(/\W/g, "");
+        }
+    },
     mounted() {
-        axios
-            .get(this.$hostname + "/api/games/name/" + this.$route.params.id)
-            .then(response => (this.game = response.data));
+        this.$http
+            .get(this.$hostname + "/api/games/" + this.$route.params.id)
+            .then(response => {
+                console.log(this.response.data);
+                this.game = response.data;
+            });
     }
 };
 </script>
