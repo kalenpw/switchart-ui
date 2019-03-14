@@ -33,7 +33,7 @@
 <script>
 // @ is an alias to /src
 import {EventBus} from '@/event-bus.js';
-import axios from "axios";
+
 export default {
     name: "Login",
     components: {},
@@ -51,13 +51,26 @@ export default {
                     password: this.password
                 })
                 .then(response => {
-                    console.log(response.data);
                     localStorage.setItem('jwt', response.data.access_token);
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+
+            //Set localStorage info now that we're validated
+            this.$http
+                .post(this.$hostname + "/api/users/show", {
+                    token: localStorage.getItem('jwt')
+                })
+                .then(response => {
+                    localStorage.setItem('username', response.data.name);
+                    localStorage.setItem('isLoggedIn', true);
                     EventBus.$emit('logged-in');
                 })
                 .catch(function(error) {
                     console.log(error);
                 });
+
         }
     }
 };

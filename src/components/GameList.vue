@@ -1,7 +1,6 @@
 <template>
     <div class="columns is-multiline">
         <div class="column is-one-quarter" v-for="game in topRecent" :key="game.name">
-            <!-- <game :name="game.title" :description="game.description" :image="game.background_url"></game> -->
             <game :name="game.name" :description="game.description"></game>
         </div>
     </div>

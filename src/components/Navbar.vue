@@ -53,6 +53,8 @@
                                 <strong>Sign up</strong>
                             </a>
                             <a @click="loginModal()" class="button is-light">Log in</a>
+
+                            <a v-if="isLoggedIn" @click="signOut" class="button is-light">Logout</a>
                         </div>
                     </div>
                 </div>
@@ -122,18 +124,35 @@ export default {
             this.showRegister = false;
             this.showForm = true;
             this.showLogin = true;
+        },
+        signOut(){
+            this.$http
+                .post(this.$hostname + "/api/logout",{
+                    token: localStorage.getItem('jwt')
+                })
+                .then(response => console.log(response))
+                .catch(error => console.log(error));
+            EventBus.$emit('logged-out');
         }
     },
     created(){
         EventBus.$on('logged-in', () =>{
-            console.log("log in triggered");
-            console.log(localStorage.getItem('jwt'));
-            // this.username = localStorage.getItem('username');
-            // this.isLoggedIn = true;
-            // this.closeNav();
-            // this.showForm = false;
-            // this.showLogin = false;
-            // this.showRegister = false;
+            this.username = localStorage.getItem('username');
+            this.isLoggedIn = true;
+            this.closeNav();
+            this.showForm = false;
+            this.showLogin = false;
+            this.showRegister = false;
+        });
+        EventBus.$on('logged-out', () =>{
+            localStorage.setItem('username', '');
+            localStorage.setItem('jwt', '');
+            this.username = "";
+            this.isLoggedIn = false;
+            this.closeNav();
+            this.showForm = false;
+            this.showLogin = false;
+            this.showRegister = false;
         });
     }
 };

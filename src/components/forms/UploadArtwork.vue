@@ -61,7 +61,6 @@ export default {
     methods: {
         uploadArtwork() {
             let formData = new FormData();
-            console.log(localStorage.getItem('jwt'));
             formData.append('artwork', this.fileData[0]);
             formData.append('token', localStorage.getItem('jwt'));
             formData.append('name', this.selectedGame);
