@@ -15,7 +15,13 @@
 
         <div class="file has-name">
             <label class="file-label">
-                <input class="file-input" ref="file" type="file" name="artwork" @change="handleFileChange">
+                <input
+                    class="file-input"
+                    ref="file"
+                    type="file"
+                    name="artwork"
+                    @change="handleFileChange"
+                >
                 <span class="file-cta">
                     <span class="file-icon">
                         <i class="fas fa-upload"></i>
@@ -53,19 +59,19 @@ export default {
             .then(response => (this.games = response.data));
     },
     methods: {
-        uploadArtwork(){
+        uploadArtwork() {
+            let formData = new FormData();
+            console.log(localStorage.getItem('jwt'));
+            formData.append('artwork', this.fileData[0]);
+            formData.append('token', localStorage.getItem('jwt'));
+            formData.append('name', this.selectedGame);
+
             this.$http
-                .post(this.$hostname + "/api/artwork/store",{
-                    token: localStorage.getItem('jwt'),
-                    name: this.selectedGame,
-                    file: this.fileData
-                })
-                .then(response => {
-                    console.log(response.data);
-                })
+                .post(this.$hostname + "/api/artwork/store", formData)
+                .then(response => console.log(response.data))
                 .catch(error => console.log(error));
         },
-        handleFileChange(event){
+        handleFileChange(event) {
             this.fileData = event.target.files || event.dataTransfer.files;
             this.selectedFile = this.fileData[0].name;
         }
