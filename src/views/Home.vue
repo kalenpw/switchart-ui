@@ -17,10 +17,8 @@ export default {
     methods:{
         test(){
             this.$http
-                .post(this.$hostname + "/api/test", {
-                    token: localStorage.getItem('jwt'),
-                    name: 'Splatoon 2',
-                    description: 'Squidy fun'
+                .post(this.$hostname + "/api/users/show", {
+                    token: localStorage.getItem('jwt')
                 })
                 .then(response => {
                     console.log(response.data);

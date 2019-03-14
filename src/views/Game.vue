@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import axios from "axios";
 
 export default {
     name: "game",
@@ -21,15 +20,14 @@ export default {
     },
     computed: {
         imageUrl() {
-            console.log(this.game);
-            return this.game.name.replace(/ /g, "_").replace(/\W/g, "");
+            let formattedName = this.game.name.replace(/ /g, "_").replace(/\W/g, "");
+            return  this.$hostname + "/images/Backgrounds/" + formattedName + ".jpg";
         }
     },
     mounted() {
         this.$http
             .get(this.$hostname + "/api/games/" + this.$route.params.id)
             .then(response => {
-                console.log(this.response.data);
                 this.game = response.data;
             });
     }

@@ -10,18 +10,16 @@
             </p>
         </div>
         <p class="panel-tabs">
-            <a class="is-active">all</a>
-            <a>public</a>
-            <a>private</a>
-            <a>sources</a>
-            <a>forks</a>
+            <a>Alphabetical</a>
+            <a>Latest</a>
+            <a>Popular</a>
         </p>
 
-        <a class="panel-block" v-for="game in gameArray" v-bind:key="game.title">
+        <a class="panel-block" v-for="game in gameArray" v-bind:key="game.name">
             <span class="panel-icon has-text-black">
                 <i class="fab fa-nintendo-switch" aria-hidden="true"></i>
             </span>
-            {{game.title}}
+            {{game.name}}
         </a>
         <div class="panel-block">
             <button class="button is-link is-outlined is-fullwidth">reset all filters</button>
@@ -46,7 +44,7 @@ export default {
     computed: {
     },
     mounted() {
-        axios.get(this.$hostname + "/api/games").then(response => {
+        this.$http.get(this.$hostname + "/api/games").then(response =>{
             this.games = response.data;
             for (let i in this.games) {
                 this.gameArray.push(this.games[i]);
@@ -58,8 +56,7 @@ export default {
     methods:{
         filterSearch(){
             this.gameArray = this.originalGames;
-            console.log(this.searchText);
-            this.gameArray = this.gameArray.filter(game => game.title.toLowerCase().includes(this.searchText.toLowerCase()));
+            this.gameArray = this.gameArray.filter(game => game.name.toLowerCase().includes(this.searchText.toLowerCase()));
         }
     }
 };

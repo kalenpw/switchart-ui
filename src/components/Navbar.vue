@@ -30,6 +30,8 @@
                         :to="'/user/' + username"
                         class="navbar-item"
                     >{{username}}</router-link>
+
+                    <router-link @click.native="closeNav" class="navbar-item" to="/upload">Upload</router-link>
                     <!-- <a class="navbar-item">Documentation</a> -->
                     <!-- <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">More</a>

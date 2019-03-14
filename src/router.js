@@ -14,6 +14,16 @@ export default new Router({
             component: Home
         },
         {
+            path: '/admin',
+            name: 'admin',
+            component: () => import('./views/Admin.vue')
+        },
+        {
+            path: '/upload',
+            name: 'upload',
+            component: () => import('./views/Upload.vue')
+        },
+        {
             path: '/games',
             name: 'games',
             // route level code-splitting
