@@ -8,6 +8,15 @@
                     <!-- <img src="@/assets/img.png"> -->
                 </figure>
             </div>
+            <footer class="card-footer">
+                <a @click="upvote" class="card-footer-item">
+                    <i class="fas fa-arrow-up"></i>
+                </a>
+                <a class="card-footer-item">{{voteCount}}</a>
+                <a @click="downvote" class="card-footer-item">
+                    <i class="fas fa-arrow-down"></i>
+                </a>
+            </footer>
         </div>
     </div>
 </template>
@@ -16,12 +25,13 @@
 export default {
     name: "Game",
     props: {
-        id: 0
+        id: 0,
     },
 
     data() {
         return {
             artwork: null,
+            voteCount: 0
         };
     },
     computed: {
@@ -36,19 +46,52 @@ export default {
                 console.log(url);
                 return url;
             }
-        }
+        },
     },
 
     mounted() {
         this.$http
             .get(this.$hostname + "/api/artwork/id/" + this.id)
             .then(response => {
-                console.log(response.data);
                 this.artwork = response.data;
             });
+        this.refreshVotes();
     },
 
-    methods: {}
+    methods: {
+        upvote() {
+            this.$http
+                .post(this.$hostname + "/api/vote/upvote/", {
+                    token: localStorage.getItem("jwt"),
+                    artworkId: this.id
+                })
+                .then(response => {
+                    console.log(response.data);
+                    this.refreshVotes();
+                })
+                .catch(error => console.log(error));
+        },
+        downvote() {
+            this.$http
+                .post(this.$hostname + "/api/vote/downvote/", {
+                    token: localStorage.getItem("jwt"),
+                    artworkId: this.id
+                })
+                .then(response => {
+                    console.log(response.data);
+                    this.refreshVotes();
+                })
+                .catch(error => console.log(error));
+        },
+        refreshVotes() {
+            this.$http
+                .get(this.$hostname + "/api/vote/artwork/" + this.id)
+                .then(response => {
+                    this.voteCount = response.data;
+                })
+                .catch(error => console.log(error));
+        }
+    }
 };
 </script>
 
