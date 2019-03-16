@@ -38,7 +38,7 @@ export default {
         },
         image(){
             let formattedName = this.name.replace(/ /g, '_').replace(/\W/g, '');
-            return "http://switchart.tk/images/Backgrounds/" + formattedName + ".jpg";
+            return this.$hostname + "/images/Backgrounds/" + formattedName + ".jpg";
 
         }
     },

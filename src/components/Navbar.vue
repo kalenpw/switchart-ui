@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nav class="navbar is-black" role="navigation" aria-label="main navigation">
+        <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
                 <router-link @click.native="closeNav()" class="navbar-item" to="/">
                     <img src="../assets/logo.png">
