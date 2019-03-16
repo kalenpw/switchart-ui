@@ -16,13 +16,21 @@
 
         <div class="field">
             <p class="control has-icons-left">
-                <input class="input" type="password" placeholder="Password" name="password" v-model="password">
+                <input
+                    class="input"
+                    type="password"
+                    placeholder="Password"
+                    name="password"
+                    v-model="password"
+                >
                 <span class="icon is-small is-left">
                     <i class="fas fa-lock"></i>
                 </span>
             </p>
         </div>
-
+        <div v-if="errorMessage.length > 1" class="field">
+            <p class="help is-danger">{{errorMessage}}</p>
+        </div>
         <div class="field">
             <p class="control">
                 <button @click.prevent="submitLogin" class="button is-success">Login</button>
@@ -32,15 +40,16 @@
 </template>
 <script>
 // @ is an alias to /src
-import {EventBus} from '@/event-bus.js';
+import { EventBus } from "@/event-bus.js";
 
 export default {
     name: "Login",
     components: {},
     data() {
         return {
-            email: '',
-            password: ''
+            email: "",
+            password: "",
+            errorMessage: ""
         };
     },
     methods: {
@@ -51,26 +60,30 @@ export default {
                     password: this.password
                 })
                 .then(response => {
-                    localStorage.setItem('jwt', response.data.access_token);
+                    this.errorMessage = "";
+                    localStorage.setItem("jwt", response.data.access_token);
+                    this.completeLogin();
                 })
-                .catch(function(error) {
+                .catch(error => {
+                    this.errorMessage = "Invalid username or password";
                     console.log(error);
                 });
-
-            //Set localStorage info now that we're validated
+        },
+        // on successful login setup neccarry info
+        completeLogin() {
             this.$http
                 .post(this.$hostname + "/api/users/show", {
-                    token: localStorage.getItem('jwt')
+                    token: localStorage.getItem("jwt")
                 })
                 .then(response => {
-                    localStorage.setItem('username', response.data.name);
-                    localStorage.setItem('isLoggedIn', true);
-                    EventBus.$emit('logged-in');
+                    localStorage.setItem("username", response.data.name);
+                    localStorage.setItem("isLoggedIn", true);
+                    EventBus.$emit("logged-in");
                 })
                 .catch(function(error) {
-                    console.log(error);
+                    // console.log("hmm");
+                    console.log(error.response.status);
                 });
-
         }
     }
 };

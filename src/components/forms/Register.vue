@@ -11,7 +11,7 @@
         </div>
         <div class="field">
             <p class="control has-icons-left has-icons-right">
-                <input class="input" type="email" placeholder="Email" v-model="email">
+                <input class="input" type="email" placeholder="email" v-model="email">
                 <span class="icon is-small is-left">
                     <i class="fas fa-envelope"></i>
                 </span>
@@ -22,7 +22,7 @@
         </div>
         <div class="field">
             <p class="control has-icons-left">
-                <input class="input" type="password" placeholder="Password" v-model="password">
+                <input @keyup="checkPassword" class="input" type="password" placeholder="password" v-model="password">
                 <span class="icon is-small is-left">
                     <i class="fas fa-lock"></i>
                 </span>
@@ -30,12 +30,27 @@
         </div>
 
         <div class="field">
-            <p class="control has-icons-left">
-                <input class="input" type="password" placeholder="Password confirm">
+            <p class="control has-icons-left has-icons-right">
+                <input
+                    @keyup="checkPassword"
+                    class="input"
+                    :class="errorPassword ? 'is-danger' : ''"
+                    type="password"
+                    placeholder="password confirm"
+                    v-model="passwordConfirm"
+                >
                 <span class="icon is-small is-left">
                     <i class="fas fa-lock"></i>
                 </span>
+                <span v-if="errorPassword" class="icon is-small is-right has-text-danger" >
+                    <i class="fas fa-times-circle"></i>
+                </span>
             </p>
+        </div>
+
+        <div class="field">
+            <p v-if="errorMessage.length > 0" class="help is-danger">{{errorMessage}}</p>
+            <p v-if="errorPassword.length > 0" class="help is-danger">{{errorPassword}}</p>
         </div>
 
         <div class="field">
@@ -46,8 +61,6 @@
     </form>
 </template>
 <script>
-// @ is an alias to /src
-
 export default {
     name: "Register",
     components: {},
@@ -55,7 +68,10 @@ export default {
         return {
             name: "",
             email: "",
-            password: ""
+            password: "",
+            passwordConfirm: "",
+            errorMessage: "",
+            errorPassword: "",
         };
     },
     methods: {
@@ -67,14 +83,25 @@ export default {
                     password: this.password
                 })
                 .then(response => {
-                    localStorage.setItem('jwt', response.data.access_token);
+                    localStorage.setItem("jwt", response.data.access_token);
                     console.log(response.data);
                     EventBus.$emit("registered");
                 })
-                .catch(function(error) {
+                .catch(error => {
+                    this.errorMessage = "Invalid username or password";
                     console.log(error);
                 });
+        },
+        checkPassword() {
+            if (this.password == this.passwordConfirm) {
+                this.errorPassword = "";
+            } else {
+                this.errorPassword = "Password does not match";
+            }
         }
+    },
+    mounted(){
+        this.errorPassword = "";
     }
 };
 </script>

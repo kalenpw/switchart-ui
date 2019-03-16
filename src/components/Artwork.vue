@@ -22,10 +22,12 @@
 </template>
 
 <script>
+import { EventBus } from "@/event-bus.js";
+
 export default {
     name: "Game",
     props: {
-        id: 0,
+        id: 0
     },
 
     data() {
@@ -46,7 +48,7 @@ export default {
                 console.log(url);
                 return url;
             }
-        },
+        }
     },
 
     mounted() {
@@ -69,7 +71,10 @@ export default {
                     console.log(response.data);
                     this.refreshVotes();
                 })
-                .catch(error => console.log(error));
+                .catch(error => {
+                    EventBus.$emit("flash-message", {selfDestruct: true, message: "Please login/sign up before voting."});
+                    console.log(error);
+                });
         },
         downvote() {
             this.$http

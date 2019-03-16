@@ -8,7 +8,6 @@
 <script>
 // @ is an alias to /src
 import GameList from "@/components/GameList.vue";
-
 export default {
     name: "home",
     components: {
