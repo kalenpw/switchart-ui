@@ -49,7 +49,7 @@
                 <div class="navbar-end">
                     <div class="navbar-item">
                         <div class="buttons">
-                            <a @click="registerModal()" class="button is-primary">
+                            <a @click="registerModal()" class="button is-warning">
                                 <strong>Sign up</strong>
                             </a>
                             <a @click="loginModal()" class="button is-light">Log in</a>

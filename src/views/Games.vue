@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div class="section">
     <GameIndex></GameIndex>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <navbar></navbar>
-        <div class="section">
+        <div class="app-content">
             <router-view/>
         </div>
         <End></End>
@@ -26,7 +26,7 @@ export default {
     min-height: 100vh;
     flex-direction: column;
 }
-.section{
+.app-content{
     flex: 1;
 }
 </style>

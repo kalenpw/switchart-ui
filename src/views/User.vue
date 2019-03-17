@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="section">
         <h1>viewing user:</h1>
 
         {{username}}

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="section">
         <UploadArtwork></UploadArtwork>
     </div>
 </template>

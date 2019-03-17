@@ -86,7 +86,10 @@ export default {
                     console.log(response.data);
                     this.refreshVotes();
                 })
-                .catch(error => console.log(error));
+                .catch(error => {
+                    EventBus.$emit("flash-message", {selfDestruct: true, message: "Please login/sign up before voting."});
+                    console.log(error);
+                });
         },
         refreshVotes() {
             this.$http

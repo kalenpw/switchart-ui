@@ -1,5 +1,5 @@
 <template>
-    <div class="home">
+    <div class="section">
         <h1>Admin</h1>
 
         <h2>Add Game</h2>
@@ -12,7 +12,12 @@
 
             <div class="field">
                 <div class="control">
-                    <input class="input" type="text" placeholder="description" v-model="description">
+                    <input
+                        class="input"
+                        type="text"
+                        placeholder="description"
+                        v-model="description"
+                    >
                 </div>
             </div>
             <div class="control">
@@ -23,30 +28,40 @@
 </template>
 
 <script>
+import { EventBus } from "@/event-bus.js";
+
 export default {
     name: "game",
     components: {},
     data() {
         return {
-            name: '',
-            description: ''
-        }
+            name: "",
+            description: ""
+        };
     },
     computed: {},
-    mounted() {
-    },
+    mounted() {},
     methods: {
-        addGame(){
+        addGame() {
             this.$http
-                .post(this.$hostname + "/api/games/store",{
-                    token: localStorage.getItem('jwt'),
+                .post(this.$hostname + "/api/games/store", {
+                    token: localStorage.getItem("jwt"),
                     name: this.name,
-                    description: this.description 
+                    description: this.description
                 })
                 .then(response => {
                     console.log(response.data);
                 })
-                .catch(error => console.log(error));
+                .catch(error => {
+                    let httpCode = error.response.status;
+                    if (httpCode == 403) {
+                        EventBus.$emit("flash-message", {
+                            selfDestruct: false,
+                            message: "Must be admin to add new games."
+                        });
+                    }
+                    console.log(error);
+                });
         }
     }
 };

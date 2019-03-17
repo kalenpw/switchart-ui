@@ -1,12 +1,18 @@
 <template>
-    <div class="home">
-        <h1>Viewing game:</h1>
-        {{ game.name }}
-        <h2></h2>
-        {{game.description}}
+    <div>
+        <!-- <figure class="image is-3-by-1 background">
+            <img :src="bannerUrl">
+        </figure> -->
+        <section class="hero is-warning background">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">{{game.name}}</h1>
+                    <h2 class="subtitle">{{game.description}}</h2>
+                </div>
+            </div>
+        </section>
         <!-- <img v-bind:src="imageUrl" v-bind:alt="game.name"> -->
-
-        <div class="columns is-multiline">
+        <div class="columns is-multiline section">
             <div class="column is-one-quarter" v-for="artwork in artworks" :key="artwork.id">
                 <Artwork :id="artwork.id"></Artwork>
                 <!-- <game :name="game.title" :description="game.description" :image="game.background_url"></game> -->
@@ -31,12 +37,27 @@ export default {
     },
     computed: {
         imageUrl() {
-            let formattedName = this.game.name
-                .replace(/ /g, "_")
-                .replace(/\W/g, "");
-            return (
-                this.$hostname + "/images/Backgrounds/" + formattedName + ".jpg"
-            );
+            if (this.game) {
+                let formattedName = this.game.name
+                    .replace(/ /g, "_")
+                    .replace(/\W/g, "");
+                return (
+                    this.$hostname +
+                    "/images/Backgrounds/" +
+                    formattedName +
+                    ".jpg"
+                );
+            }
+        },
+        bannerUrl() {
+            if (this.game) {
+                let formattedName = this.game.name
+                    .replace(/ /g, "_")
+                    .replace(/\W/g, "");
+                return (
+                    this.$hostname + "/images/Banners/" + formattedName + ".png"
+                );
+            }
         },
         artworkUrls() {
             let allUrls = [];
@@ -68,3 +89,10 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.background {
+    /* position: absolute; */
+    /* background-image: url("http://localhost:8000/images/Banners/Splatoon_2.png"); */
+}
+</style>
