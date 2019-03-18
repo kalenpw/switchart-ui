@@ -41,6 +41,7 @@
 <script>
 // @ is an alias to /src
 import { EventBus } from "@/event-bus.js";
+import UserApi from "@/api/users.js";
 
 export default {
     name: "Login",
@@ -54,14 +55,10 @@ export default {
     },
     methods: {
         submitLogin() {
-            this.$http
-                .post(this.$hostname + "/api/login", {
-                    email: this.email,
-                    password: this.password
-                })
+            UserApi.submitLogin(this.email, this.password)
                 .then(response => {
                     this.errorMessage = "";
-                    localStorage.setItem("jwt", response.data.access_token);
+                    localStorage.setItem("jwt", response.access_token);
                     this.completeLogin();
                 })
                 .catch(error => {
@@ -71,12 +68,9 @@ export default {
         },
         // on successful login setup neccarry info
         completeLogin() {
-            this.$http
-                .post(this.$hostname + "/api/users/show", {
-                    token: localStorage.getItem("jwt")
-                })
+            UserApi.getLoggedInUser()
                 .then(response => {
-                    localStorage.setItem("username", response.data.name);
+                    localStorage.setItem("username", response.name);
                     localStorage.setItem("isLoggedIn", true);
                     EventBus.$emit("logged-in");
                 })

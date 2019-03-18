@@ -62,6 +62,7 @@
 </template>
 <script>
 import {EventBus} from "@/event-bus.js";
+import UserApi from "@/api/users.js";
 export default {
     name: "Register",
     components: {},
@@ -77,20 +78,13 @@ export default {
     },
     methods: {
         submitRegister() {
-            this.$http
-                .post(this.$hostname + "/api/register", {
-                    name: this.name,
-                    email: this.email,
-                    password: this.password
-                })
+            UserApi.register(this.name, this.email, this.password)
                 .then(response => {
-                    localStorage.setItem("jwt", response.data.access_token);
-                    console.log(response.data);
-                    EventBus.$emit("registered");
+                    localStorage.setItem("jwt", response);
+                    this.completeLogin();
                 })
                 .catch(error => {
                     this.errorMessage = "Invalid username or password";
-                    console.log(error);
                 });
         },
         checkPassword() {
@@ -99,6 +93,17 @@ export default {
             } else {
                 this.errorPassword = "Password does not match";
             }
+        },
+        completeLogin() {
+            UserApi.getLoggedInUser()
+                .then(response => {
+                    localStorage.setItem("username", response.name);
+                    localStorage.setItem("isLoggedIn", true);
+                    EventBus.$emit("logged-in");
+                })
+                .catch(function(error) {
+                    console.log(error.response.status);
+                });
         }
     },
     mounted(){

@@ -23,6 +23,8 @@
 
 <script>
 import { EventBus } from "@/event-bus.js";
+import VoteApi from "@/api/votes.js";
+import ArtworkApi from "@/api/artworks.js";
 
 export default {
     name: "Game",
@@ -45,57 +47,50 @@ export default {
                 //the database fileName has an extra public we need to drop
                 split = split.splice(1, split.length - 1);
                 let url = base + split.join("/");
-                console.log(url);
                 return url;
             }
         }
     },
 
     mounted() {
-        this.$http
-            .get(this.$hostname + "/api/artwork/id/" + this.id)
+        ArtworkApi.getArtworkById(this.id)
             .then(response => {
-                this.artwork = response.data;
+                this.artwork = response;
             });
         this.refreshVotes();
     },
 
     methods: {
         upvote() {
-            this.$http
-                .post(this.$hostname + "/api/vote/upvote/", {
-                    token: localStorage.getItem("jwt"),
-                    artworkId: this.id
-                })
+            VoteApi.upvote(localStorage.getItem("jwt"), this.id)
                 .then(response => {
-                    console.log(response.data);
                     this.refreshVotes();
                 })
                 .catch(error => {
-                    EventBus.$emit("flash-message", {selfDestruct: true, message: "Please login/sign up before voting."});
+                    EventBus.$emit("flash-message", {
+                        selfDestruct: true,
+                        message: "Please login/sign up before voting."
+                    });
                     console.log(error);
                 });
         },
         downvote() {
-            this.$http
-                .post(this.$hostname + "/api/vote/downvote/", {
-                    token: localStorage.getItem("jwt"),
-                    artworkId: this.id
-                })
+            VoteApi.downvote(localStorage.getItem("jwt"), this.id)
                 .then(response => {
-                    console.log(response.data);
                     this.refreshVotes();
                 })
                 .catch(error => {
-                    EventBus.$emit("flash-message", {selfDestruct: true, message: "Please login/sign up before voting."});
+                    EventBus.$emit("flash-message", {
+                        selfDestruct: true,
+                        message: "Please login/sign up before voting."
+                    });
                     console.log(error);
                 });
         },
         refreshVotes() {
-            this.$http
-                .get(this.$hostname + "/api/vote/artwork/" + this.id)
+            VoteApi.getVotesForArtwork(this.id)
                 .then(response => {
-                    this.voteCount = response.data;
+                    this.voteCount = response;
                 })
                 .catch(error => console.log(error));
         }

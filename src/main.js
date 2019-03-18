@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import Axios from 'axios'
 
+Window.hostname = "http://localhost:8000";
 Vue.prototype.$http = Axios;
 Vue.config.productionTip = false
 

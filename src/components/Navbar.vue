@@ -83,9 +83,7 @@
 import Register from "@/components/forms/Register.vue";
 import Login from "@/components/forms/Login.vue";
 import {EventBus} from "@/event-bus.js";
-// EventBus.$on('logged-in', ()=>{
-//     console.log("log in herd");
-// });
+
 export default {
     components: {
         Register,
@@ -154,6 +152,12 @@ export default {
             this.showLogin = false;
             this.showRegister = false;
         });
+    },
+    mounted(){
+        if(localStorage.getItem('username')){
+            this.isLoggedIn = true;
+            this.username = localStorage.getItem('username');
+        }
     }
 };
 </script>

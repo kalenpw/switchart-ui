@@ -9,6 +9,7 @@
 <script>
 import Game from "./Game.vue";
 import {dateSort} from "@/Utils/sorting-utils.js";
+import GameApi from "@/api/games.js";
 
 export default {
     components: {
@@ -35,19 +36,16 @@ export default {
     },
 
     mounted() {
-
-        this.$http.get(this.$hostname + "/api/games/").then(response => {
-            this.games = response.data;
-            for (let i in this.games) {
-                this.gameArray.push(this.games[i]);
-            }
-            this.unmodifiedGames = this.gameArray;
-        });
+        GameApi.getGames()
+            .then(games => {
+                this.unmodifiedGames = games;
+            })
+            .catch(error => console.log(error))
+            .finally(() => {
+                
+            });
     },
 
     methods: {}
 };
 </script>
-
-<style scoped>
-</style>
