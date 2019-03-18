@@ -60,6 +60,12 @@ export default {
                             message: "Must be admin to add new games."
                         });
                     }
+                    else if(httpCode = 500){
+                        EventBus.$emit("flash-message", {
+                            selfDestruct: false,
+                            message: "Login to an admin account to upload games."
+                        });
+                    }
                     console.log(error);
                 });
         }

@@ -42,5 +42,14 @@ export default {
                 console.log("1");
                 console.log(error);
             })
+    },
+    logOut(){
+        return http
+            .post("/logout", {
+                token: localStorage.getItem('jwt')
+            })
+            .then(response => {
+                return response.data;
+            })
     }
 }

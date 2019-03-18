@@ -37,6 +37,7 @@
 import axios from "axios";
 import { alphabeticalSort } from "@/Utils/sorting-utils.js";
 import { dateSort } from "@/Utils/sorting-utils.js";
+import { formatName } from "@/Utils/url-utils.js";
 import GameApi from "@/api/games.js";
 
 export default {
@@ -56,6 +57,7 @@ export default {
     mounted() {
         GameApi.getGames()
             .then(games => {
+                this.games = games.sort(alphabeticalSort);
                 this.games = games;
                 this.allGames = this.games;
             })

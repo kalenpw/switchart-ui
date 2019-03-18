@@ -6,5 +6,11 @@ export default{
         .then(response => {
             return response.data;
         })
+    },
+    getArtworksByUser(name){
+        return http.get("/artwork/user/" + name)
+        .then(response => {
+            return response.data;
+        })
     }
 }

@@ -82,6 +82,7 @@
 <script>
 import Register from "@/components/forms/Register.vue";
 import Login from "@/components/forms/Login.vue";
+import UserApi from "@/api/users.js";
 import {EventBus} from "@/event-bus.js";
 
 export default {
@@ -124,12 +125,11 @@ export default {
             this.showLogin = true;
         },
         signOut(){
-            this.$http
-                .post(this.$hostname + "/api/logout",{
-                    token: localStorage.getItem('jwt')
-                })
+            UserApi.logOut()
                 .then(response => console.log(response))
-                .catch(error => console.log(error));
+                .catch(error => {
+                    console.log(error);
+                })
             EventBus.$emit('logged-out');
         }
     },

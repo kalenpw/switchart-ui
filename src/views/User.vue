@@ -13,6 +13,8 @@
 
 <script>
 import Artwork from "@/components/Artwork.vue";
+import ArtworkApi from "@/api/artworks.js";
+
 export default {
     name: "user",
     components: {
@@ -31,11 +33,9 @@ export default {
         }
     },
     mounted() {
-        this.$http
-            .get(this.$hostname + "/api/artwork/user/" + this.$route.params.id)
+        ArtworkApi.getArtworksByUser(this.$route.params.id)
             .then(response => {
-                console.log(response.data);
-                this.userUploads = response.data;
+                this.userUploads = response;
             })
             .catch(error => {
                 console.log(error);

@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import {formatName} from "@/Utils/url-utils.js";
 export default {
     name: "Game",
     props: {
@@ -32,14 +33,11 @@ export default {
     },
     computed: {
         imageUrl() {
-            // console.log(this.name);
-            // return this.name;
-            return this.name.replace(/ /g, '_').replace(/\W/g, '');
+            return formatName(this.name);
         },
         image(){
-            let formattedName = this.name.replace(/ /g, '_').replace(/\W/g, '');
+            let formattedName = formatName(this.name);
             return this.$hostname + "/images/Backgrounds/" + formattedName + ".jpg";
-
         }
     },
 
