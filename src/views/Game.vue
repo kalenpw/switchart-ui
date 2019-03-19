@@ -2,7 +2,7 @@
     <div>
         <!-- <figure class="image is-3-by-1 background">
             <img :src="bannerUrl">
-        </figure> -->
+        </figure>-->
         <section class="hero is-warning background">
             <div class="hero-body">
                 <div class="container">
@@ -25,6 +25,7 @@
 import Artwork from "@/components/Artwork.vue";
 import GameApi from "@/api/games.js";
 import ArtworkApi from "@/api/artworks.js";
+import { EventBus } from "@/event-bus.js";
 
 export default {
     name: "game",
@@ -75,15 +76,27 @@ export default {
             return allUrls;
         }
     },
+    methods: {
+        refreshArtworks() {
+            ArtworkApi.getArtworksByGame(this.$route.params.id).then(
+                response => {
+                    this.artworks = response;
+                }
+            );
+        }
+    },
     mounted() {
-        GameApi.getGameByName(this.$route.params.id)
-            .then(response => {
-                this.game = response;
-            });
-        ArtworkApi.getArtworksByGame(this.$route.params.id)
-        .then(response => {
+        GameApi.getGameByName(this.$route.params.id).then(response => {
+            this.game = response;
+        });
+        ArtworkApi.getArtworksByGame(this.$route.params.id).then(response => {
             this.artworks = response;
-        })
+        });
+    },
+    created() {
+        EventBus.$on("artwork-deleted", () => {
+            this.refreshArtworks();
+        });
     }
 };
 </script>

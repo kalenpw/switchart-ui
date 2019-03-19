@@ -19,4 +19,13 @@ export default{
             return response.data;
         }) 
     },
+    deleteArtwork(token, id){
+        return http.post("/artwork/destroy", {
+            id: id,
+            token: token
+        })
+        .then(response => {
+            return response.data;
+        })
+    }
 }
