@@ -12,5 +12,11 @@ export default{
         .then(response => {
             return response.data;
         })
-    }
+    },
+    getArtworksByGame(gameName){
+        return http.get("/artwork/game/" + gameName)
+        .then(response => {
+            return response.data;
+        }) 
+    },
 }

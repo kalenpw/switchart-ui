@@ -23,6 +23,8 @@
 
 <script>
 import Artwork from "@/components/Artwork.vue";
+import GameApi from "@/api/games.js";
+import ArtworkApi from "@/api/artworks.js";
 
 export default {
     name: "game",
@@ -74,18 +76,14 @@ export default {
         }
     },
     mounted() {
-        this.$http
-            .get(this.$hostname + "/api/games/" + this.$route.params.id)
+        GameApi.getGameByName(this.$route.params.id)
             .then(response => {
-                this.game = response.data;
+                this.game = response;
             });
-
-        this.$http
-            .get(this.$hostname + "/api/artwork/game/" + this.$route.params.id)
-            .then(response => {
-                console.log(response.data);
-                this.artworks = response.data;
-            });
+        ArtworkApi.getArtworksByGame(this.$route.params.id)
+        .then(response => {
+            this.artworks = response;
+        })
     }
 };
 </script>

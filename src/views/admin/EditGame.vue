@@ -1,8 +1,5 @@
 <template>
     <div class="section">
-        <h1>Admin</h1>
-
-        <h2>Add Game</h2>
         <form>
             <div class="field">
                 <div class="control">
@@ -22,56 +19,42 @@
             </div>
             <div class="field">
                 <div class="control">
-                    <button @click.prevent="addGame" class="button is-primary">Submit</button>
+                    <button @click.prevent="editGame" class="button is-primary">Update</button>
                 </div>
-            </div>
-
-            <div>
-                <h2 class="title">Edit Game</h2>
-                <p v-for="game in games" v-bind:key="game.id">
-                    <a :href="'/admin/game/edit/' + game.id">{{game.name}}</a>
-                </p>
             </div>
         </form>
     </div>
 </template>
 
 <script>
-//import EditGame from "@/components/forms/admin/EditGame.vue";
-import EditGame from "@/views/admin/EditGame.vue";
-import { EventBus } from "@/event-bus.js";
 import GameApi from "@/api/games.js";
+import {EventBus} from "@/event-bus.js";
 
 export default {
-    name: "game",
-    components: {
-        EditGame
-    },
+    name: "EditGame",
+    props: {},
     data() {
         return {
+            game: null,
             name: "",
             description: "",
-            games: []
+            gameId: 0,
         };
     },
-    computed: {},
     mounted() {
-        GameApi.getGames()
-            .then(games => {
-                this.games = games;
-                console.log(this.games);
-            })
-            .catch(error => console.log(error))
-            .finally(() => {});
+        this.gameId = this.$route.params.id;
+        GameApi.getGameById(this.gameId).then(response => {
+            this.game = response;
+            console.log(response);
+            this.name = this.game.name;
+            this.description = this.game.description;
+        });
     },
     methods: {
-        addGame() {
-            GameApi.createGame(
-                localStorage.getItem("jwt"),
-                this.name,
-                this.description
-            )
-                .then(response => {
+        editGame(){
+            console.log(localStorage.getItem('jwt'));
+            GameApi.updateGame(localStorage.getItem('jwt'), this.gameId, this.name, this.description)
+                .then(response =>{
                     console.log(response);
                 })
                 .catch(error => {
@@ -79,13 +62,13 @@ export default {
                     if (httpCode == 403) {
                         EventBus.$emit("flash-message", {
                             selfDestruct: false,
-                            message: "Must be admin to add new games."
+                            message: "Must be admin to update a game."
                         });
                     } else if ((httpCode = 500)) {
                         EventBus.$emit("flash-message", {
                             selfDestruct: false,
                             message:
-                                "Login to an admin account to upload games."
+                                "Login to an admin account to update a game."
                         });
                     }
                     console.log(error);
