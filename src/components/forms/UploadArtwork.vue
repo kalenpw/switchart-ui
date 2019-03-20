@@ -41,6 +41,7 @@
 </template>
 <script>
 // @ is an alias to /src
+import { EventBus } from "@/event-bus.js";
 
 export default {
     name: "UploadArtwork",
@@ -61,14 +62,23 @@ export default {
     methods: {
         uploadArtwork() {
             let formData = new FormData();
-            formData.append('artwork', this.fileData[0]);
-            formData.append('token', localStorage.getItem('jwt'));
-            formData.append('name', this.selectedGame);
+            formData.append("artwork", this.fileData[0]);
+            formData.append("token", localStorage.getItem("jwt"));
+            formData.append("name", this.selectedGame);
 
             this.$http
                 .post(this.$hostname + "/api/artwork/store", formData)
                 .then(response => console.log(response.data))
-                .catch(error => console.log(error));
+                .catch(error => {
+                    let httpCode = error.response.status;
+                    if (httpCode == 422) {
+                        EventBus.$emit("flash-message", {
+                            selfDestruct: true,
+                            message: "Error uploading file."
+                        });
+                    }
+                    console.log(error);
+                });
         },
         handleFileChange(event) {
             this.fileData = event.target.files || event.dataTransfer.files;
