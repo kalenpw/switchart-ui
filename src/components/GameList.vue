@@ -3,6 +3,7 @@
         <div class="column is-one-quarter" v-for="game in topRecent" :key="game.name">
             <game :name="game.name" :description="game.description"></game>
         </div>
+        <button @click="loadGames" class="button is-fullwidth is-warning" >Load more</button>
     </div>
 </template>
 
@@ -25,13 +26,15 @@ export default {
         return {
             games: null,
             gameArray: [],
-            unmodifiedGames: []
+            unmodifiedGames: [],
+            amountLoaded: 1
         };
     },
     computed: {
         topRecent(){
+            let toLoad = this.amountLoaded * 8;
             this.games = this.unmodifiedGames.sort(dateSort);
-            return this.games.slice(0, 8);
+            return this.games.slice(0, toLoad);
         }
     },
 
@@ -46,6 +49,10 @@ export default {
             });
     },
 
-    methods: {}
+    methods: {
+        loadGames(){
+            this.amountLoaded++;    
+        }
+    }
 };
 </script>
