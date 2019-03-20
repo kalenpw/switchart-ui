@@ -20,13 +20,8 @@
             <a :class="isRecentSort ? 'is-active' : ''" @click="sortRecent">Latest</a>
             <a :class="isPopularSort ? 'is-active' : ''" @click="sortPopular">Popular</a>
         </p>
+        <GameIndexItem v-for="game in games" v-bind:key="game.id" :game="game"></GameIndexItem>
 
-        <a class="panel-block" v-for="game in games" v-bind:key="game.name">
-            <span class="panel-icon has-text-black">
-                <i class="fab fa-nintendo-switch" aria-hidden="true"></i>
-            </span>
-            {{game.name}}
-        </a>
         <div class="panel-block">
             <button class="button is-link is-outlined is-fullwidth">reset all filters</button>
         </div>
@@ -34,15 +29,21 @@
 </template>
 
 <script>
-import axios from "axios";
 import { alphabeticalSort } from "@/Utils/sorting-utils.js";
 import { dateSort } from "@/Utils/sorting-utils.js";
+import { popularSort } from "@/Utils/sorting-utils.js";
+
 import { formatName } from "@/Utils/url-utils.js";
+
 import GameApi from "@/api/games.js";
+import ArtworkApi from "@/api/artworks.js";
+import GameIndexItem from "@/components/GameIndexItem.vue";
 
 export default {
     name: "GameIndex",
-    components: {},
+    components: {
+        GameIndexItem
+    },
     data() {
         return {
             searchText: "",
@@ -53,18 +54,35 @@ export default {
             isPopularSort: false
         };
     },
-    computed: {},
+    computed: {
+        detailsUrl() {
+            let base = this.$hostname;
+            let url = formatName();
+        }
+    },
     mounted() {
         GameApi.getGames()
             .then(games => {
                 this.games = games.sort(alphabeticalSort);
                 this.games = games;
                 this.allGames = this.games;
+                this.getArtworkCounts();
             })
             .catch(error => console.log(error))
             .finally(() => {});
     },
     methods: {
+        getArtworkCounts() {
+            for (let i = 0; i < this.games.length; i++) {
+                ArtworkApi.getArtworksByGame(formatName(this.games[i].name))
+                    .then(response => {
+                        this.games[i].artworkCount = response.length;
+                        console.log(this.games[i].artworkCount + " " + this.games[i].name);
+                    })
+                    .catch(error => console.log(error));
+            }
+            console.log(this.games);
+        },
         filterSearch() {
             this.games = this.allGames;
             this.games = this.games.filter(game =>
@@ -88,7 +106,12 @@ export default {
             }
         },
         sortPopular() {
-            this.toggleSortStates("popular");
+            if (this.isPopularSort) {
+                this.games.reverse();
+            } else {
+                this.toggleSortStates("popular");
+                this.games = this.allGames.slice().sort(popularSort);
+            }
         },
 
         toggleSortStates(activeSort) {

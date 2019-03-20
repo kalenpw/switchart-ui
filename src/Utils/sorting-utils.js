@@ -17,3 +17,7 @@ export function dateSort(a , b){
     }
     return 0;
 }
+
+export function popularSort(a, b){
+    return b.artworkCount - a.artworkCount;
+}
