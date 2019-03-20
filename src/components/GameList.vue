@@ -3,13 +3,17 @@
         <div class="column is-one-quarter" v-for="game in topRecent" :key="game.name">
             <game :name="game.name" :description="game.description"></game>
         </div>
-        <button @click="loadGames" class="button is-fullwidth is-warning" >Load more</button>
+        <button
+            v-if="games.length > 8 * amountLoaded"
+            @click="loadGames"
+            class="button is-fullwidth is-warning"
+        >Load more</button>
     </div>
 </template>
 
 <script>
 import Game from "./Game.vue";
-import {dateSort} from "@/Utils/sorting-utils.js";
+import { dateSort } from "@/Utils/sorting-utils.js";
 import GameApi from "@/api/games.js";
 
 export default {
@@ -31,7 +35,7 @@ export default {
         };
     },
     computed: {
-        topRecent(){
+        topRecent() {
             let toLoad = this.amountLoaded * 8;
             this.games = this.unmodifiedGames.sort(dateSort);
             return this.games.slice(0, toLoad);
@@ -44,14 +48,14 @@ export default {
                 this.unmodifiedGames = games;
             })
             .catch(error => console.log(error))
-            .finally(() => {
-                
-            });
+            .finally(() => {});
     },
 
     methods: {
-        loadGames(){
-            this.amountLoaded++;    
+        loadGames() {
+            if (this.amountLoaded * 8 < this.games.length) {
+                this.amountLoaded++;
+            }
         }
     }
 };
