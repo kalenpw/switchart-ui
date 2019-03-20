@@ -1,24 +1,25 @@
 <template>
     <div>
-        <a @click="showModal">
-            <div class="card">
+        <div class="card">
+            <a @click="showModal">
                 <div class="card-image">
                     <h1></h1>
                     <figure class="image is-2by1">
+                        <!-- <figure> -->
                         <img v-bind:src="artworkUrl">
                     </figure>
                 </div>
-                <footer class="card-footer">
-                    <a @click="upvote" class="card-footer-item">
-                        <i class="fas fa-arrow-up"></i>
-                    </a>
-                    <a class="card-footer-item">{{voteCount}}</a>
-                    <a @click="downvote" class="card-footer-item">
-                        <i class="fas fa-arrow-down"></i>
-                    </a>
-                </footer>
-            </div>
-        </a>
+            </a>
+            <footer class="card-footer">
+                <a @click="upvote" class="card-footer-item">
+                    <i class="fas fa-arrow-up"></i>
+                </a>
+                <a class="card-footer-item">{{voteCount}}</a>
+                <a @click="downvote" class="card-footer-item">
+                    <i class="fas fa-arrow-down"></i>
+                </a>
+            </footer>
+        </div>
         <ArtworkDetails v-if="showDetails" :artworkId="id"></ArtworkDetails>
     </div>
 </template>
@@ -30,7 +31,6 @@ import { getArtworkUrl } from "@/Utils/url-utils.js";
 import VoteApi from "@/api/votes.js";
 import ArtworkApi from "@/api/artworks.js";
 import UserApi from "@/api/users.js";
-
 
 export default {
     name: "Game",
@@ -53,7 +53,7 @@ export default {
             if (this.artwork) {
                 return this.$hostname + getArtworkUrl(this.artwork.fileName);
             }
-        },
+        }
     },
 
     mounted() {

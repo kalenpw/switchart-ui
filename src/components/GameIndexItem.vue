@@ -24,8 +24,6 @@ export default {
     },
     computed: {
         gameUrl() {
-            this.$forceUpdate();
-            console.log(this.game.artworkCount + " " + this.game.name);
             return "/game/" + formatName(this.game.name);
         }
     },
