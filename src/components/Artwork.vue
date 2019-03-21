@@ -2,11 +2,9 @@
     <div>
         <div class="card">
             <a @click="showModal">
-                <div class="card-image">
-                    <h1></h1>
-                    <!-- <figure class="image is-2by1"> -->
-                    <figure class="has-image-centered">
-                        <img v-bind:src="artworkUrl">
+                <div class="card-image has-text-centered">
+                    <figure class="is-inline-block">
+                        <img v-bind:src="artworkUrl" class="sa-card-image">
                     </figure>
                 </div>
             </a>
@@ -120,8 +118,7 @@ export default {
 </script>
 
 <style scoped>
-/* .has-image-centered{
-    margin-left: auto;
-    margin-right: auto;
-} */
+.sa-card-image{
+    max-height: 300px;
+}
 </style>
