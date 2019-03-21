@@ -13,10 +13,16 @@
         </section>
         <!-- <img v-bind:src="imageUrl" v-bind:alt="game.name"> -->
         <div class="columns is-multiline section">
-            <div class="column is-one-quarter" v-for="artwork in artworks" :key="artwork.id">
+            <div class="column is-one-quarter" v-for="artwork in visibleArtworks" :key="artwork.id">
                 <Artwork :id="artwork.id"></Artwork>
                 <!-- <game :name="game.title" :description="game.description" :image="game.background_url"></game> -->
             </div>
+
+            <button
+                v-if="artworks.length > 8 * amountLoaded"
+                @click="loadGames"
+                class="button is-fullwidth is-warning"
+            >Load more</button>
         </div>
     </div>
 </template>
@@ -35,7 +41,8 @@ export default {
     data() {
         return {
             game: null,
-            artworks: []
+            artworks: [],
+            amountLoaded: 1
         };
     },
     computed: {
@@ -51,6 +58,10 @@ export default {
                     ".jpg"
                 );
             }
+        },
+        visibleArtworks() {
+            let toLoad = this.amountLoaded * 8;
+            return this.artworks.slice(0, toLoad);
         },
         bannerUrl() {
             if (this.game) {
@@ -83,6 +94,9 @@ export default {
                     this.artworks = response;
                 }
             );
+        },
+        loadGames(){
+            this.amountLoaded++;
         }
     },
     mounted() {

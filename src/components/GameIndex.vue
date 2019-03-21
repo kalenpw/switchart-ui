@@ -60,7 +60,6 @@ export default {
     mounted() {
         GameApi.getGames()
             .then(games => {
-                this.games = games.sort(alphabeticalSort);
                 this.games = games;
                 this.allGames = this.games;
                 this.getArtworkCounts();

@@ -55,7 +55,7 @@
 
         <div class="field">
             <p class="control">
-                <button @click.prevent="submitRegister" class="button is-success">Register</button>
+                <button @click.prevent="submitRegister" class="button is-warning">Register</button>
             </p>
         </div>
     </form>

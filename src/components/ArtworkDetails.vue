@@ -1,8 +1,9 @@
 <template>
     <div v-if="showModal" class="modal is-active">
         <div @click="hideModal" class="modal-background"></div>
-        <div class="modal-content box">
-            <figure class="image is-2by1">
+        <div class="modal-content box has-text-centered">
+            <!-- <figure class="image is-2by1"> -->
+            <figure class="is-inline-block">
                 <img v-bind:src="artworkUrl">
             </figure>
 

@@ -1,12 +1,29 @@
 <template>
-    <div class="section">
-        <h1>viewing user:</h1>
-
-        {{username}}
-        <div class="columns is-multiline">
-            <div class="column is-one-quarter" v-for="artwork in userUploads" :key="artwork.id">
-                <Artwork :id="artwork.id"></Artwork>
+    <div>
+        <section class="hero is-warning">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title">{{username}}'s uploads</h1>
+                </div>
             </div>
+        </section>
+
+        <div class="section">
+            <div class="columns is-multiline">
+                <div
+                    class="column is-one-quarter"
+                    v-for="artwork in visibleUploads"
+                    :key="artwork.id"
+                >
+                    <Artwork :id="artwork.id"></Artwork>
+                </div>
+            </div>
+
+            <button
+                v-if="userUploads.length > 8 * amountLoaded"
+                @click="loadGames"
+                class="button is-fullwidth is-warning"
+            >Load more</button>
         </div>
     </div>
 </template>
@@ -22,14 +39,17 @@ export default {
     },
     data() {
         return {
-            userUploads: []
+            userUploads: [],
+            amountLoaded: 1
         };
     },
     computed: {
         username() {
-            if (this.$route.params.id === localStorage.username) {
-                return localStorage.username;
-            }
+            return this.$route.params.id;
+        },
+        visibleUploads() {
+            let toLoad = this.amountLoaded * 8;
+            return this.userUploads.slice(0, toLoad);
         }
     },
     mounted() {
@@ -39,7 +59,13 @@ export default {
             })
             .catch(error => {
                 console.log(error);
+                window.location.href = "/404";
             });
+    },
+    methods:{
+        loadGames(){
+            this.amountLoaded++;
+        }
     }
 };
 </script>

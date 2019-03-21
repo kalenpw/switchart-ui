@@ -33,7 +33,7 @@
         </div>
         <div class="field">
             <p class="control">
-                <button @click.prevent="submitLogin" class="button is-success">Login</button>
+                <button @click.prevent="submitLogin" class="button is-warning">Login</button>
             </p>
         </div>
     </form>

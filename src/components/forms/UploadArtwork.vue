@@ -34,7 +34,7 @@
 
         <div class="field">
             <p class="control">
-                <button @click.prevent="uploadArtwork" class="button is-success">Upload</button>
+                <button @click.prevent="uploadArtwork" class="button is-warning">Upload</button>
             </p>
         </div>
     </form>
@@ -78,6 +78,9 @@ export default {
             )
                 .then(response => {
                     console.log(response);
+                    let formattedName = formatName(this.selectedGame);
+                    let redirectUrl = "/game/" + formattedName;
+                    window.location.href = redirectUrl;
                 })
                 .catch(error => {
                     let httpCode = error.response.status;
@@ -85,6 +88,12 @@ export default {
                         EventBus.$emit("flash-message", {
                             selfDestruct: true,
                             message: "Error uploading file."
+                        });
+                    }
+                    else if(httpCode == 500){
+                        EventBus.$emit("flash-message", {
+                            selfDestruct: true,
+                            message: "Please login to upload."
                         });
                     }
                     console.log(error);
