@@ -1,18 +1,18 @@
 <template>
     <div>
-        <router-link :to="'/game/' + imageUrl">
+        <router-link :to="'/game/' + gameUrl">
             <div class="card">
                 <header class="card-header">
-                    <p class="card-header-title">{{name}}</p>
+                    <p class="card-header-title">{{game.name}}</p>
                 </header>
                 <div class="card-image">
                     <figure class="image is-2by1">
-                        <img v-bind:src="image" v-bind:alt="name">
+                        <img v-bind:src="imageUrl" v-bind:alt="game.name">
                         <!-- <img src="@/assets/img.png"> -->
                     </figure>
                 </div>
                 <div class="card-content">
-                    <div class="content">{{description}}</div>
+                    <div class="content">{{game.description}}</div>
                 </div>
             </div>
         </router-link>
@@ -20,25 +20,40 @@
 </template>
 
 <script>
-import {formatName} from "@/Utils/url-utils.js";
+import { formatName } from "@/Utils/url-utils.js";
+import { getArtworkUrl } from "@/Utils/url-utils.js";
 export default {
     name: "Game",
     props: {
-        name: String,
-        description: String,
+        game: Object
     },
 
     data() {
         return {};
     },
     computed: {
-        imageUrl() {
-            return formatName(this.name);
+        gameUrl() {
+            // let url = getArtworkUrl(this.game.image);
+            return formatName(this.game.name);
         },
-        image(){
-            let formattedName = formatName(this.name);
-            return this.$hostname + "/images/Backgrounds/" + formattedName + ".jpg";
-        }
+        imageUrl() {
+            if (this.game.image) {
+                let url = getArtworkUrl(this.game.image);
+                return this.$hostname + url;
+            }
+            // games that were saved without an image fall back
+            // to manually created backgrounds
+            else {
+                let formattedName = formatName(this.game.name);
+                return (
+                    this.$hostname +
+                    "/images/Backgrounds/" +
+                    formattedName +
+                    ".jpg"
+                );
+            }
+        },
+        image() {}
     },
 
     mounted() {},

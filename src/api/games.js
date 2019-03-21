@@ -7,12 +7,14 @@ export default{
                 return response.data;
             })
     },
-    createGame(token, name, description){
-        return http.post('/games/store', {
-            token: token,
-            name: name,
-            description: description
-        })
+    createGame(token, name, description, file){
+        let formData = new FormData();
+        formData.append("token", token);
+        formData.append("name", name);
+        formData.append("description", description);
+        formData.append("image", file);
+
+        return http.post('/games/store', formData)
         .then(response => {
             return response.data;
         })

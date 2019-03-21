@@ -1,7 +1,7 @@
 <template>
     <div class="columns is-multiline">
         <div class="column is-one-quarter" v-for="game in topRecent" :key="game.name">
-            <game :name="game.name" :description="game.description"></game>
+            <game :game="game" ></game>
         </div>
         <button
             v-if="games.length > 8 * amountLoaded"

@@ -55,7 +55,7 @@ export default {
     mounted() {
         ArtworkApi.getArtworksByUser(this.$route.params.id)
             .then(response => {
-                this.userUploads = response;
+                this.userUploads = response.reverse();
             })
             .catch(error => {
                 console.log(error);

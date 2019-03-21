@@ -1,51 +1,30 @@
 <template>
     <div class="section">
-        <h1>Admin</h1>
+        <h1 class="title">Admin</h1>
 
-        <h2>Add Game</h2>
-        <form>
-            <div class="field">
-                <div class="control">
-                    <input class="input" type="text" placeholder="Name" v-model="name">
-                </div>
-            </div>
-
-            <div class="field">
-                <div class="control">
-                    <input
-                        class="input"
-                        type="text"
-                        placeholder="description"
-                        v-model="description"
-                    >
-                </div>
-            </div>
-            <div class="field">
-                <div class="control">
-                    <button @click.prevent="addGame" class="button is-primary">Submit</button>
-                </div>
-            </div>
-
-            <div>
-                <h2 class="title">Edit Game</h2>
-                <p v-for="game in games" v-bind:key="game.id">
-                    <a :href="'/admin/game/edit/' + game.id">{{game.name}}</a>
-                </p>
-            </div>
-        </form>
+        <h2 class="title">Add Game</h2>
+        <NewGame></NewGame>
+        <div>
+            <h2 class="title">Edit Game</h2>
+            <p v-for="game in games" v-bind:key="game.id">
+                <a :href="'/admin/game/edit/' + game.id">{{game.name}}</a>
+            </p>
+        </div>
     </div>
 </template>
 
 <script>
 //import EditGame from "@/components/forms/admin/EditGame.vue";
 import EditGame from "@/views/admin/EditGame.vue";
+import NewGame from "@/components/forms/admin/NewGame.vue";
 import { EventBus } from "@/event-bus.js";
 import GameApi from "@/api/games.js";
 
 export default {
     name: "game",
     components: {
-        EditGame
+        EditGame,
+        NewGame
     },
     data() {
         return {
@@ -59,7 +38,6 @@ export default {
         GameApi.getGames()
             .then(games => {
                 this.games = games;
-                console.log(this.games);
             })
             .catch(error => console.log(error))
             .finally(() => {});
