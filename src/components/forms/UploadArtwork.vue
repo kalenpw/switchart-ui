@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <div class="file has-name">
+        <div class="field file has-name">
             <label class="file-label">
                 <input
                     class="file-input"
@@ -42,6 +42,8 @@
 <script>
 // @ is an alias to /src
 import { EventBus } from "@/event-bus.js";
+import { formatName } from "@/Utils/url-utils.js";
+import ArtworkApi from "@/api/artworks.js";
 
 export default {
     name: "UploadArtwork",
@@ -50,7 +52,7 @@ export default {
         return {
             games: [],
             selectedGame: "",
-            selectedFile: "",
+            selectedFile: null,
             fileData: null
         };
     },
@@ -61,14 +63,22 @@ export default {
     },
     methods: {
         uploadArtwork() {
-            let formData = new FormData();
-            formData.append("artwork", this.fileData[0]);
-            formData.append("token", localStorage.getItem("jwt"));
-            formData.append("name", this.selectedGame);
+            if (!this.selectedGame || !this.selectedFile) {
+                EventBus.$emit("flash-message", {
+                    selfDestruct: true,
+                    message: "Please select a game and file."
+                });
+                return;
+            }
 
-            this.$http
-                .post(this.$hostname + "/api/artwork/store", formData)
-                .then(response => console.log(response.data))
+            ArtworkApi.uploadArtwork(
+                this.selectedGame,
+                localStorage.getItem("jwt"),
+                this.fileData[0]
+            )
+                .then(response => {
+                    console.log(response);
+                })
                 .catch(error => {
                     let httpCode = error.response.status;
                     if (httpCode == 422) {

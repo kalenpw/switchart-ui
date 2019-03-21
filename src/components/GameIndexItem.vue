@@ -31,7 +31,6 @@ export default {
         ArtworksApi.getArtworksByGame(formatName(this.game.name))
             .then(response => {
                 this.artworks = response;
-                console.log(this.artworks);
             })
             .catch(error => console.log(error));
     }

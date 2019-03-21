@@ -4,8 +4,8 @@
             <a @click="showModal">
                 <div class="card-image">
                     <h1></h1>
-                    <figure class="image is-2by1">
-                        <!-- <figure> -->
+                    <!-- <figure class="image is-2by1"> -->
+                    <figure class="has-image-centered">
                         <img v-bind:src="artworkUrl">
                     </figure>
                 </div>
@@ -35,7 +35,10 @@ import UserApi from "@/api/users.js";
 export default {
     name: "Game",
     props: {
-        id: 0
+        id:{
+            type: Number,
+            default: 0
+        }
     },
     components: {
         ArtworkDetails
@@ -53,6 +56,8 @@ export default {
             if (this.artwork) {
                 return this.$hostname + getArtworkUrl(this.artwork.fileName);
             }
+            //TODO placeholder image
+            return "";
         }
     },
 
@@ -68,7 +73,7 @@ export default {
     methods: {
         upvote() {
             VoteApi.upvote(localStorage.getItem("jwt"), this.id)
-                .then(response => {
+                .then(() => {
                     this.refreshVotes();
                 })
                 .catch(error => {
@@ -81,7 +86,7 @@ export default {
         },
         downvote() {
             VoteApi.downvote(localStorage.getItem("jwt"), this.id)
-                .then(response => {
+                .then(() => {
                     this.refreshVotes();
                 })
                 .catch(error => {
@@ -115,4 +120,8 @@ export default {
 </script>
 
 <style scoped>
+/* .has-image-centered{
+    margin-left: auto;
+    margin-right: auto;
+} */
 </style>

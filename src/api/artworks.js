@@ -1,31 +1,43 @@
 import http from '@/api/axios.js';
 
-export default{
-    getArtworkById(id){
+export default {
+    getArtworkById(id) {
         return http.get("/artwork/id/" + id)
-        .then(response => {
-            return response.data;
-        })
+            .then(response => {
+                return response.data;
+            })
     },
-    getArtworksByUser(name){
+    getArtworksByUser(name) {
         return http.get("/artwork/user/" + name)
-        .then(response => {
-            return response.data;
-        })
+            .then(response => {
+                return response.data;
+            })
     },
-    getArtworksByGame(gameName){
+    getArtworksByGame(gameName) {
         return http.get("/artwork/game/" + gameName)
-        .then(response => {
-            return response.data;
-        }) 
+            .then(response => {
+                return response.data;
+            })
     },
-    deleteArtwork(token, id){
+    deleteArtwork(token, id) {
         return http.post("/artwork/destroy", {
             id: id,
             token: token
         })
-        .then(response => {
-            return response.data;
-        })
+            .then(response => {
+                return response.data;
+            })
+    },
+    uploadArtwork(name, token, artworkFile) {
+        let formData = new FormData();
+        formData.append("artwork", artworkFile);
+        formData.append("token", localStorage.getItem("jwt"));
+        formData.append("name", name);
+
+        return http.post("/artwork/store", formData)
+            .then(response => {
+                return response.data;
+            });
     }
 }
+

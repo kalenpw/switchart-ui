@@ -22,9 +22,6 @@
         </p>
         <GameIndexItem v-for="game in games" v-bind:key="game.id" :game="game"></GameIndexItem>
 
-        <div class="panel-block">
-            <button class="button is-link is-outlined is-fullwidth">reset all filters</button>
-        </div>
     </nav>
 </template>
 
@@ -77,11 +74,9 @@ export default {
                 ArtworkApi.getArtworksByGame(formatName(this.games[i].name))
                     .then(response => {
                         this.games[i].artworkCount = response.length;
-                        console.log(this.games[i].artworkCount + " " + this.games[i].name);
                     })
                     .catch(error => console.log(error));
             }
-            console.log(this.games);
         },
         filterSearch() {
             this.games = this.allGames;
