@@ -16,12 +16,11 @@
             </p>
         </div>
         <p class="panel-tabs">
-            <a :class="isAlphSort ? 'is-active' : ''" @click="sortAlphabetical">Alphabetical</a>
-            <a :class="isRecentSort ? 'is-active' : ''" @click="sortRecent">Latest</a>
-            <a :class="isPopularSort ? 'is-active' : ''" @click="sortPopular">Popular</a>
+            <a :class="isAlphSort ? 'is-active' : ''" @click="sortAlphabetical">Alphabetical<i :class="alphabeticalArrow"></i></a>
+            <a :class="isRecentSort ? 'is-active' : ''" @click="sortRecent">Latest<i :class="recentArrow"></i></a>
+            <a :class="isPopularSort ? 'is-active' : ''" @click="sortPopular">Popular<i :class="popularArrow"></i></a>
         </p>
         <GameIndexItem v-for="game in games" v-bind:key="game.id" :game="game"></GameIndexItem>
-
     </nav>
 </template>
 
@@ -48,7 +47,10 @@ export default {
             allGames: [],
             isAlphSort: true,
             isRecentSort: false,
-            isPopularSort: false
+            isPopularSort: false,
+            alphabeticalArrow: 'fas fa-caret-down',
+            recentArrow: 'fas fa-caret-down',
+            popularArrow: 'fas fa-caret-down'
         };
     },
     computed: {
@@ -84,6 +86,7 @@ export default {
             );
         },
         sortAlphabetical() {
+            this.toggleArrow("alphabetical");
             if (this.isAlphSort) {
                 this.games.reverse();
             } else {
@@ -92,6 +95,7 @@ export default {
             }
         },
         sortRecent() {
+            this.toggleArrow("recent");
             if (this.isRecentSort) {
                 this.games.reverse();
             } else {
@@ -100,6 +104,7 @@ export default {
             }
         },
         sortPopular() {
+            this.toggleArrow("popular");
             if (this.isPopularSort) {
                 this.games.reverse();
             } else {
@@ -107,12 +112,38 @@ export default {
                 this.games = this.allGames.slice().sort(popularSort);
             }
         },
-
+        toggleArrow(sortMethod){
+            const ARROW_UP_CLASS = 'fas fa-caret-up';
+            const ARROW_DOWN_CLASS= 'fas fa-caret-down';
+            if (sortMethod == "alphabetical") {
+                if(this.alphabeticalArrow == ARROW_UP_CLASS){
+                    this.alphabeticalArrow = ARROW_DOWN_CLASS;
+                }
+                else{
+                    this.alphabeticalArrow = ARROW_UP_CLASS;
+                }
+            } else if (sortMethod == "popular") {
+                if(this.popularArrow == ARROW_UP_CLASS){
+                    this.popularArrow = ARROW_DOWN_CLASS;
+                }
+                else{
+                    this.popularArrow = ARROW_UP_CLASS;
+                }
+            } else if (sortMethod == "recent") {
+                if(this.recentArrow == ARROW_UP_CLASS){
+                    this.recentArrow = ARROW_DOWN_CLASS;
+                }
+                else{
+                    this.recentArrow = ARROW_UP_CLASS;
+                }
+            }
+        },
         toggleSortStates(activeSort) {
             if (activeSort == "alphabetical") {
                 this.isAlphSort = true;
                 this.isRecentSort = false;
                 this.isPopularSort = false;
+
             } else if (activeSort == "popular") {
                 this.isAlphSort = false;
                 this.isRecentSort = false;
@@ -126,3 +157,9 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.panel-tabs a i{
+    padding-left: 4px;
+}
+</style>

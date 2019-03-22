@@ -44,6 +44,7 @@
 import { EventBus } from "@/event-bus.js";
 import { formatName } from "@/Utils/url-utils.js";
 import ArtworkApi from "@/api/artworks.js";
+import GameApi from "@/api/games.js";
 
 export default {
     name: "UploadArtwork",
@@ -57,9 +58,9 @@ export default {
         };
     },
     mounted() {
-        this.$http
-            .get(this.$hostname + "/api/games")
-            .then(response => (this.games = response.data));
+        // console.log(this.$route);
+        GameApi.getGames()
+            .then(response => this.games = response);
     },
     methods: {
         uploadArtwork() {

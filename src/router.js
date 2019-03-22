@@ -16,7 +16,7 @@ export default new Router({
         {
             path: '/admin',
             name: 'admin',
-            component: () => import('./views/Admin.vue')
+            component: () => import('./views/Admin.vue'),
         },
         {
             path: '/admin/game/edit/:id',
