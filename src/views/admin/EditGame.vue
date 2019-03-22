@@ -17,6 +17,26 @@
                     >
                 </div>
             </div>
+
+            <div class="field file has-name">
+                <label class="file-label">
+                    <input
+                        class="file-input"
+                        ref="file"
+                        type="file"
+                        name="image"
+                        @change="handleFileChange"
+                    >
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">Choose a file…</span>
+                    </span>
+                    <span v-text="fileName" class="file-name"></span>
+                </label>
+            </div>
+
             <div class="field">
                 <div class="control">
                     <button @click.prevent="editGame" class="button is-primary">Update</button>
@@ -28,7 +48,7 @@
 
 <script>
 import GameApi from "@/api/games.js";
-import {EventBus} from "@/event-bus.js";
+import { EventBus } from "@/event-bus.js";
 
 export default {
     name: "EditGame",
@@ -39,6 +59,8 @@ export default {
             name: "",
             description: "",
             gameId: 0,
+            fileName: "",
+            fileData: []
         };
     },
     mounted() {
@@ -51,11 +73,21 @@ export default {
         });
     },
     methods: {
-        editGame(){
-            console.log(localStorage.getItem('jwt'));
-            GameApi.updateGame(localStorage.getItem('jwt'), this.gameId, this.name, this.description)
-                .then(response =>{
+        editGame() {
+            console.log(localStorage.getItem("jwt"));
+            GameApi.updateGame(
+                localStorage.getItem("jwt"),
+                this.gameId,
+                this.name,
+                this.description,
+                this.fileData[0]
+            )
+                .then(response => {
                     console.log(response);
+                    EventBus.$emit("flash-message", {
+                        selfDestruct: true,
+                        message: "Succesfully updated " + this.name
+                    });
                 })
                 .catch(error => {
                     let httpCode = error.response.status;
@@ -73,6 +105,10 @@ export default {
                     }
                     console.log(error);
                 });
+        },
+        handleFileChange() {
+            this.fileData = event.target.files || event.dataTransfer.files;
+            this.fileName = this.fileData[0].name;
         }
     }
 };
