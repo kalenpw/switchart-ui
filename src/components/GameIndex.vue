@@ -64,21 +64,12 @@ export default {
             .then(games => {
                 this.games = games;
                 this.allGames = this.games;
-                this.getArtworkCounts();
+                console.log(games);
             })
             .catch(error => console.log(error))
             .finally(() => {});
     },
     methods: {
-        getArtworkCounts() {
-            for (let i = 0; i < this.games.length; i++) {
-                ArtworkApi.getArtworksByGame(formatName(this.games[i].name))
-                    .then(response => {
-                        this.games[i].artworkCount = response.length;
-                    })
-                    .catch(error => console.log(error));
-            }
-        },
         filterSearch() {
             this.games = this.allGames;
             this.games = this.games.filter(game =>

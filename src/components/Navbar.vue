@@ -39,7 +39,6 @@
                 </div>
             </div>
         </nav>
-
     </div>
 </template>
 
@@ -60,35 +59,34 @@ export default {
     data() {
         return {
             isMobileExpanded: false,
-            username: '',
+            username: "",
             isLoggedIn: false
         };
     },
-    computed: {
-    },
+    computed: {},
     methods: {
         toggleNav() {
             this.isMobileExpanded = !this.isMobileExpanded;
         },
         closeNav() {
             this.isMobileExpanded = false;
-        },
+        }
     },
-    created(){
-        EventBus.$on('logged-in', () =>{
-            this.username = localStorage.getItem('username');
+    created() {
+        EventBus.$on("logged-in", () => {
+            this.username = localStorage.getItem("username");
             this.isLoggedIn = true;
             this.closeNav();
         });
-        EventBus.$on('logged-out', () =>{
+        EventBus.$on("logged-out", () => {
             this.username = "";
             this.isLoggedIn = false;
             this.closeNav();
         });
     },
-    mounted(){
+    mounted() {
         UserApi.getLoggedInUser()
-            .then(response =>{
+            .then(response => {
                 this.isLoggedIn = true;
                 this.username = response.name;
                 localStorage.setItem("username", response.name);
@@ -97,7 +95,7 @@ export default {
                 this.isLoggedIn = false;
                 localStorage.removeItem("username");
                 localStorage.removeItem("jwt");
-            })
+            });
     }
 };
 </script>

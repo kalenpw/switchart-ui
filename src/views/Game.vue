@@ -9,14 +9,18 @@
             </div>
         </section>
 
+        <div class="columns is-centered">
+            <button @click="sortByDate" class="button">Recent</button>
+            <button @click="sortByPopular" class="button">Popular</button>
+        </div>
+
         <div v-if="artworks" class="columns is-multiline section">
-            <div
-                class="column is-one-quarter"
+            <Artwork
                 v-for="artwork in artworks.visibleItems"
-                :key="artwork.id"
-            >
-                <Artwork :id="artwork.id"></Artwork>
-            </div>
+                v-bind:key="artwork.id"
+                class="column is-one-quarter"
+                :id="artwork.id"
+            ></Artwork>
 
             <button
                 v-if="!artworks.hasLoadedAll()"
@@ -31,8 +35,10 @@
 import Artwork from "@/components/Artwork.vue";
 import GameApi from "@/api/games.js";
 import ArtworkApi from "@/api/artworks.js";
-import { EventBus } from "@/event-bus.js";
+import EventBus from "@/event-bus.js";
 import LazyLoadedList from "@/Utils/LazyLoadedList.js";
+import { dateSort } from "@/Utils/sorting-utils.js";
+import { popularSort } from "@/Utils/sorting-utils.js";
 
 export default {
     name: "game",
@@ -50,10 +56,20 @@ export default {
         refreshArtworks() {
             ArtworkApi.getArtworksByGame(this.$route.params.id).then(
                 response => {
+                    console.log(response);
                     this.artworks = new LazyLoadedList(response);
                     this.artworks.reverse();
                 }
             );
+        },
+        sortAlphabetically() {
+            this.artworks.sortBy(alphabeticalSort);
+        },
+        sortByDate() {
+            this.artworks.sortBy(dateSort);
+        },
+        sortByPopular() {
+            this.artworks.sortBy(popularSort);
         }
     },
     mounted() {

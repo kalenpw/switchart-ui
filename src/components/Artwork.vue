@@ -33,7 +33,7 @@ import UserApi from "@/api/users.js";
 export default {
     name: "Game",
     props: {
-        id:{
+        id: {
             type: Number,
             default: 0
         }
@@ -115,7 +115,7 @@ export default {
 </script>
 
 <style scoped>
-.sa-card-image{
+.sa-card-image {
     max-height: 300px;
 }
 </style>

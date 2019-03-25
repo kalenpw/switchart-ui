@@ -46,7 +46,7 @@ export default {
                 console.log(error);
             })
     },
-    logOut(){
+    logOut() {
         return http
             .post("/logout", {
                 token: localStorage.getItem('jwt')

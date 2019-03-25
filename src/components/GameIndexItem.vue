@@ -4,13 +4,12 @@
             <i class="fab fa-nintendo-switch" aria-hidden="true"></i>
         </span>
         {{game.name}}
-        <span class="badge">{{artworks.length}}</span>
+        <span class="badge">{{game.artworks.length}}</span>
     </a>
 </template>
 
 <script>
 import { formatName } from "@/Utils/url-utils.js";
-import ArtworksApi from "@/api/artworks.js";
 
 export default {
     name: "GameIndexVue",
@@ -27,13 +26,6 @@ export default {
             return "/game/" + formatName(this.game.name);
         }
     },
-    mounted() {
-        ArtworksApi.getArtworksByGame(formatName(this.game.name))
-            .then(response => {
-                this.artworks = response;
-            })
-            .catch(error => console.log(error));
-    }
 };
 </script>
 

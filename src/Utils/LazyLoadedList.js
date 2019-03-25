@@ -2,6 +2,7 @@ class LazyLoadedList {
     allItems = [];
     visibleItems = [];
     amoutLoaded = 8;
+    lastSortedBy = null;
 
     constructor(allItems) {
         this.allItems = allItems;
@@ -21,12 +22,18 @@ class LazyLoadedList {
         return this.amoutLoaded > this.allItems.length;
     }
 
-    sortBy(sortMethod){
-        this.allItems.sort(sortMethod);
-        this.loadItems();
+    sortBy(sortMethod) {
+        if (sortMethod == this.lastSortedBy) {
+            this.reverse();
+        }
+        else {
+            this.allItems.sort(sortMethod);
+            this.lastSortedBy = sortMethod;
+            this.loadItems();
+        }
     }
 
-    reverse(){
+    reverse() {
         this.allItems.reverse();
         this.loadItems();
     }

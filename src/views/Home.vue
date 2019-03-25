@@ -12,7 +12,6 @@ export default {
     components: {
         GameList
     },
-    methods:{
-    },
+    methods: {}
 };
 </script>

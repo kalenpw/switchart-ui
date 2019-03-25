@@ -75,6 +75,18 @@ export default {
             this.hideAccountForms();
             this.isLoggedIn = true;
         });
+    },
+    mounted() {
+        UserApi.getLoggedInUser()
+            .then(response => {
+                this.isLoggedIn = true;
+                localStorage.setItem("username", response.name);
+            })
+            .catch(error => {
+                this.isLoggedIn = false;
+                localStorage.removeItem("username");
+                localStorage.removeItem("jwt");
+            });
     }
 };
 </script>
