@@ -2,7 +2,6 @@
     <div v-if="showModal" class="modal is-active">
         <div @click="hideModal" class="modal-background"></div>
         <div class="modal-content box has-text-centered">
-            <!-- <figure class="image is-2by1"> -->
             <figure class="is-inline-block">
                 <img v-bind:src="artworkUrl">
             </figure>
@@ -38,7 +37,7 @@
 import { EventBus } from "@/event-bus.js";
 import ArtworkApi from "@/api/artworks.js";
 import UserApi from "@/api/users.js";
-import { getArtworkUrl } from "@/Utils/url-utils.js";
+import { getImageUrl } from "@/Utils/url-utils.js";
 
 export default {
     name: "ArtworkDetails",
@@ -57,7 +56,7 @@ export default {
     computed: {
         artworkUrl() {
             if (this.artwork) {
-                return this.$hostname + getArtworkUrl(this.artwork.fileName);
+                return this.$hostname + getImageUrl(this.artwork.fileName);
             }
         },
         userUploaded() {
@@ -74,10 +73,7 @@ export default {
             EventBus.$emit("close-modal");
         },
         updateArtworkUrl() {
-            console.log(this.artwork);
-            console.log(this.artwork.fileName);
-            console.log(this.$hostname + getArtworkUrl(this.artwork.fileName));
-            return this.$hostname + getArtworkUrl(this.artwork.fileName);
+            return this.$hostname + getImageUrl(this.artwork.fileName);
         },
         handleDelete() {
             console.log("deleting");

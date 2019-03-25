@@ -1,26 +1,26 @@
 <template>
     <div>
-        <!-- <figure class="image is-3-by-1 background">
-            <img :src="bannerUrl">
-        </figure>-->
         <section class="hero is-warning background">
             <div class="hero-body">
-                <div class="container">
+                <div v-if="game" class="container">
                     <h1 class="title">{{game.name}}</h1>
                     <h2 class="subtitle">{{game.description}}</h2>
                 </div>
             </div>
         </section>
-        <!-- <img v-bind:src="imageUrl" v-bind:alt="game.name"> -->
-        <div class="columns is-multiline section">
-            <div class="column is-one-quarter" v-for="artwork in visibleArtworks" :key="artwork.id">
+
+        <div v-if="artworks" class="columns is-multiline section">
+            <div
+                class="column is-one-quarter"
+                v-for="artwork in artworks.visibleItems"
+                :key="artwork.id"
+            >
                 <Artwork :id="artwork.id"></Artwork>
-                <!-- <game :name="game.title" :description="game.description" :image="game.background_url"></game> -->
             </div>
 
             <button
-                v-if="artworks.length > 8 * amountLoaded"
-                @click="loadGames"
+                v-if="!artworks.hasLoadedAll()"
+                @click="artworks.loadMore()"
                 class="button is-fullwidth is-warning"
             >Load more</button>
         </div>
@@ -32,6 +32,7 @@ import Artwork from "@/components/Artwork.vue";
 import GameApi from "@/api/games.js";
 import ArtworkApi from "@/api/artworks.js";
 import { EventBus } from "@/event-bus.js";
+import LazyLoadedList from "@/Utils/LazyLoadedList.js";
 
 export default {
     name: "game",
@@ -41,70 +42,26 @@ export default {
     data() {
         return {
             game: null,
-            artworks: [],
-            amountLoaded: 1
+            artworks: null
         };
     },
-    computed: {
-        imageUrl() {
-            if (this.game) {
-                let formattedName = this.game.name
-                    .replace(/ /g, "_")
-                    .replace(/\W/g, "");
-                return (
-                    this.$hostname +
-                    "/images/Backgrounds/" +
-                    formattedName +
-                    ".jpg"
-                );
-            }
-        },
-        visibleArtworks() {
-            let toLoad = this.amountLoaded * 8;
-            return this.artworks.slice(0, toLoad);
-        },
-        bannerUrl() {
-            if (this.game) {
-                let formattedName = this.game.name
-                    .replace(/ /g, "_")
-                    .replace(/\W/g, "");
-                return (
-                    this.$hostname + "/images/Banners/" + formattedName + ".png"
-                );
-            }
-        },
-        artworkUrls() {
-            let allUrls = [];
-            for (let i = 0; i < this.artworks.length; i++) {
-                let base = this.$hostname + "/storage/";
-                let fileName = this.artworks[i].fileName;
-                let split = fileName.split("/");
-                //the database fileName has an extra public we need to drop
-                split = split.splice(1, split.length - 1);
-                let url = base + split.join("/");
-                allUrls.push(url);
-            }
-            return allUrls;
-        }
-    },
+    computed: {},
     methods: {
         refreshArtworks() {
             ArtworkApi.getArtworksByGame(this.$route.params.id).then(
                 response => {
-                    this.artworks = response;
+                    this.artworks = new LazyLoadedList(response);
                 }
             );
         },
-        loadGames(){
-            this.amountLoaded++;
-        }
     },
     mounted() {
         GameApi.getGameByName(this.$route.params.id).then(response => {
             this.game = response;
         });
         ArtworkApi.getArtworksByGame(this.$route.params.id).then(response => {
-            this.artworks = response;
+            // this.artworks = response;
+            this.artworks = new LazyLoadedList(response);
         });
     },
     created() {
@@ -116,8 +73,4 @@ export default {
 </script>
 
 <style scoped>
-.background {
-    /* position: absolute; */
-    /* background-image: url("http://localhost:8000/images/Banners/Splatoon_2.png"); */
-}
 </style>

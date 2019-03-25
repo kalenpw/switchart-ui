@@ -8,11 +8,11 @@
             </div>
         </section>
 
-        <div class="section">
+        <div v-if="userUploads" class="section">
             <div class="columns is-multiline">
                 <div
                     class="column is-one-quarter"
-                    v-for="artwork in visibleUploads"
+                    v-for="artwork in userUploads.visibleItems"
                     :key="artwork.id"
                 >
                     <Artwork :id="artwork.id"></Artwork>
@@ -20,8 +20,8 @@
             </div>
 
             <button
-                v-if="userUploads.length > 8 * amountLoaded"
-                @click="loadGames"
+                v-if="! userUploads.hasLoadedAll()"
+                @click="userUploads.loadMore()"
                 class="button is-fullwidth is-warning"
             >Load more</button>
         </div>
@@ -31,6 +31,7 @@
 <script>
 import Artwork from "@/components/Artwork.vue";
 import ArtworkApi from "@/api/artworks.js";
+import LazyLoadedList from "@/Utils/LazyLoadedList.js";
 
 export default {
     name: "user",
@@ -39,33 +40,24 @@ export default {
     },
     data() {
         return {
-            userUploads: [],
-            amountLoaded: 1
+            userUploads: null
         };
     },
     computed: {
         username() {
             return this.$route.params.id;
-        },
-        visibleUploads() {
-            let toLoad = this.amountLoaded * 8;
-            return this.userUploads.slice(0, toLoad);
         }
     },
     mounted() {
-        ArtworkApi.getArtworksByUser(this.$route.params.id)
+        ArtworkApi.getArtworksByUser(this.username)
             .then(response => {
-                this.userUploads = response.reverse();
+                this.userUploads = new LazyLoadedList(response);
+                this.userUploads.reverse();
             })
             .catch(error => {
                 console.log(error);
                 window.location.href = "/404";
             });
-    },
-    methods:{
-        loadGames(){
-            this.amountLoaded++;
-        }
     }
 };
 </script>

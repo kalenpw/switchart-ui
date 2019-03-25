@@ -1,11 +1,11 @@
 <template>
-    <div class="columns is-multiline">
-        <div class="column is-one-quarter" v-for="game in topRecent" :key="game.name">
-            <game :game="game" ></game>
+    <div class="columns is-multiline" v-if="games">
+        <div class="column is-one-quarter" v-for="game in games.visibleItems" :key="game.name">
+            <game :game="game"></game>
         </div>
         <button
-            v-if="games.length > 8 * amountLoaded"
-            @click="loadGames"
+            v-if="! games.hasLoadedAll()"
+            @click="games.loadMore()"
             class="button is-fullwidth is-warning"
         >Load more</button>
     </div>
@@ -13,50 +13,32 @@
 
 <script>
 import Game from "./Game.vue";
-import { dateSort } from "@/Utils/sorting-utils.js";
 import GameApi from "@/api/games.js";
+import { dateSort } from "@/Utils/sorting-utils.js";
+import LazyLoadedList from "@/Utils/LazyLoadedList.js";
 
 export default {
     components: {
         Game
     },
     name: "GameList",
-    props: {
-        name: String,
-        description: String,
-        image: String
-    },
+    props: {},
     data() {
         return {
-            games: null,
-            gameArray: [],
-            unmodifiedGames: [],
-            amountLoaded: 1
+            games: null
         };
-    },
-    computed: {
-        topRecent() {
-            let toLoad = this.amountLoaded * 8;
-            this.games = this.unmodifiedGames.sort(dateSort);
-            return this.games.slice(0, toLoad);
-        }
     },
 
     mounted() {
         GameApi.getGames()
             .then(games => {
-                this.unmodifiedGames = games;
+                this.games = new LazyLoadedList(games);
+                this.games.sortBy(dateSort);
             })
             .catch(error => console.log(error))
             .finally(() => {});
     },
 
-    methods: {
-        loadGames() {
-            if (this.amountLoaded * 8 < this.games.length) {
-                this.amountLoaded++;
-            }
-        }
-    }
+    methods: {}
 };
 </script>

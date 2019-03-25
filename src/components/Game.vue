@@ -21,7 +21,8 @@
 
 <script>
 import { formatName } from "@/Utils/url-utils.js";
-import { getArtworkUrl } from "@/Utils/url-utils.js";
+import { getImageUrl } from "@/Utils/url-utils.js";
+
 export default {
     name: "Game",
     props: {
@@ -33,12 +34,11 @@ export default {
     },
     computed: {
         gameUrl() {
-            // let url = getArtworkUrl(this.game.image);
             return formatName(this.game.name);
         },
         imageUrl() {
             if (this.game.image) {
-                let url = getArtworkUrl(this.game.image);
+                let url = getImageUrl(this.game.image);
                 return this.$hostname + url;
             }
             // games that were saved without an image fall back

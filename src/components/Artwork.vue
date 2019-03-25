@@ -25,7 +25,7 @@
 <script>
 import ArtworkDetails from "@/components/ArtworkDetails.vue";
 import { EventBus } from "@/event-bus.js";
-import { getArtworkUrl } from "@/Utils/url-utils.js";
+import { getImageUrl } from "@/Utils/url-utils.js";
 import VoteApi from "@/api/votes.js";
 import ArtworkApi from "@/api/artworks.js";
 import UserApi from "@/api/users.js";
@@ -52,7 +52,7 @@ export default {
     computed: {
         artworkUrl() {
             if (this.artwork) {
-                return this.$hostname + getArtworkUrl(this.artwork.fileName);
+                return this.$hostname + getImageUrl(this.artwork.fileName);
             }
             //TODO placeholder image
             return "";
@@ -101,9 +101,6 @@ export default {
                     this.voteCount = response;
                 })
                 .catch(error => console.log(error));
-        },
-        handleDelete() {
-            console.log("deleting");
         },
         showModal() {
             this.showDetails = true;
