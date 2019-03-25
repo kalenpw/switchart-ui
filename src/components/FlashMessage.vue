@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { EventBus } from "@/event-bus.js";
+import EventBus from "@/event-bus.js";
 export default {
     name: "FlashMessage",
     components: {},
@@ -43,7 +43,8 @@ export default {
 
 <style>
 .message-wrapper {
-    /* position: fixed; */
-    /* bottom: 0; */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 </style>

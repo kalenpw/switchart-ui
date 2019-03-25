@@ -41,7 +41,7 @@
 </template>
 <script>
 // @ is an alias to /src
-import { EventBus } from "@/event-bus.js";
+import EventBus from "@/event-bus.js";
 import { formatName } from "@/Utils/url-utils.js";
 import ArtworkApi from "@/api/artworks.js";
 import GameApi from "@/api/games.js";
@@ -73,8 +73,8 @@ export default {
             }
 
             ArtworkApi.uploadArtwork(
-                this.selectedGame,
                 localStorage.getItem("jwt"),
+                this.selectedGame,
                 this.fileData[0]
             )
                 .then(response => {

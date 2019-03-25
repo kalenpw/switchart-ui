@@ -51,18 +51,16 @@ export default {
             ArtworkApi.getArtworksByGame(this.$route.params.id).then(
                 response => {
                     this.artworks = new LazyLoadedList(response);
+                    this.artworks.reverse();
                 }
             );
-        },
+        }
     },
     mounted() {
         GameApi.getGameByName(this.$route.params.id).then(response => {
             this.game = response;
         });
-        ArtworkApi.getArtworksByGame(this.$route.params.id).then(response => {
-            // this.artworks = response;
-            this.artworks = new LazyLoadedList(response);
-        });
+        this.refreshArtworks();
     },
     created() {
         EventBus.$on("artwork-deleted", () => {

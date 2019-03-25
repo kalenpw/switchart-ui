@@ -28,10 +28,10 @@ export default {
                 return response.data;
             })
     },
-    uploadArtwork(name, token, artworkFile) {
+    uploadArtwork(token, name, artworkFile) {
         let formData = new FormData();
         formData.append("artwork", artworkFile);
-        formData.append("token", localStorage.getItem("jwt"));
+        formData.append("token", token);
         formData.append("name", name);
 
         return http.post("/artwork/store", formData)

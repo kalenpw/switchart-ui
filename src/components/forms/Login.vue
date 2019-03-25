@@ -40,7 +40,7 @@
 </template>
 <script>
 // @ is an alias to /src
-import { EventBus } from "@/event-bus.js";
+import EventBus from "@/event-bus.js";
 import UserApi from "@/api/users.js";
 
 export default {

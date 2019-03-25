@@ -24,7 +24,7 @@
 
 <script>
 import ArtworkDetails from "@/components/ArtworkDetails.vue";
-import { EventBus } from "@/event-bus.js";
+import EventBus from "@/event-bus.js";
 import { getImageUrl } from "@/Utils/url-utils.js";
 import VoteApi from "@/api/votes.js";
 import ArtworkApi from "@/api/artworks.js";

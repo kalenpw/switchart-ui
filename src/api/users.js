@@ -27,6 +27,9 @@ export default {
             .then(response => {
                 return response.data;
             })
+            .catch(error => {
+
+            })
     },
     register(name, email, password) {
         return http

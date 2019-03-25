@@ -61,7 +61,7 @@
     </form>
 </template>
 <script>
-import {EventBus} from "@/event-bus.js";
+import EventBus from "@/event-bus.js";
 import UserApi from "@/api/users.js";
 export default {
     name: "Register",

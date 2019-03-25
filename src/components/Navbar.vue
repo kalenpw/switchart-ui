@@ -12,7 +12,7 @@
                     aria-label="menu"
                     aria-expanded="false"
                     data-target="navbarBasicExample"
-                    v-bind:class="[active ? activeClass : '']"
+                    v-bind:class="[isMobileExpanded ? 'is-active' : '']"
                     @click="toggleNav()"
                 >
                     <span aria-hidden="true"></span>
@@ -21,7 +21,7 @@
                 </a>
             </div>
 
-            <div class="navbar-menu" v-bind:class="[active ? activeClass : '']">
+            <div class="navbar-menu" v-bind:class="[isMobileExpanded ? 'is-active' : '']">
                 <div class="navbar-start">
                     <router-link @click.native="closeNav()" class="navbar-item" to="/games">Games</router-link>
                     <router-link
@@ -32,63 +32,26 @@
                     >{{username}}</router-link>
 
                     <router-link @click.native="closeNav" class="navbar-item" to="/upload">Upload</router-link>
-                    <!-- <a class="navbar-item">Documentation</a> -->
-                    <!-- <div class="navbar-item has-dropdown is-hoverable">
-                    <a class="navbar-link">More</a>
-
-                    <div class="navbar-dropdown">
-                        <a class="navbar-item">About</a>
-                        <a class="navbar-item">Jobs</a>
-                        <a class="navbar-item">Contact</a>
-                        <hr class="navbar-divider">
-                        <a class="navbar-item">Report an issue</a>
-                    </div>
-                    </div>-->
                 </div>
 
                 <div class="navbar-end">
-                    <div class="navbar-item">
-                        <div class="buttons">
-                            <a @click="registerModal()" class="button is-warning">
-                                <strong>Sign up</strong>
-                            </a>
-                            <a @click="loginModal()" class="button is-light">Log in</a>
-
-                            <a v-if="isLoggedIn" @click="signOut" class="button is-light">Logout</a>
-                        </div>
-                    </div>
+                    <AccountActions></AccountActions>
                 </div>
             </div>
         </nav>
 
-        <div v-if="showForm" class="modal is-active">
-            <div @click="showForm = false" class="modal-background"></div>
-            <div class="modal-content">
-                <div class="box">
-                    <div v-if="showRegister">
-                        <Register></Register>
-                    </div>
-                    <div v-if="showLogin">
-                        <Login></Login>
-                    </div>
-                </div>
-                <!-- Any other Bulma elements you want -->
-            </div>
-            <button @click="showForm = false" class="modal-close is-large" aria-label="close"></button>
-        </div>
     </div>
 </template>
 
 <script>
-import Register from "@/components/forms/Register.vue";
-import Login from "@/components/forms/Login.vue";
+import AccountActions from "@/components/navbar/AccountActions.vue";
+
 import UserApi from "@/api/users.js";
-import {EventBus} from "@/event-bus.js";
+import EventBus from "@/event-bus.js";
 
 export default {
     components: {
-        Register,
-        Login
+        AccountActions
     },
     name: "Navbar",
     props: {
@@ -96,11 +59,7 @@ export default {
     },
     data() {
         return {
-            active: false,
-            activeClass: "is-active",
-            showRegister: false,
-            showLogin: false,
-            showForm: false,
+            isMobileExpanded: false,
             username: '',
             isLoggedIn: false
         };
@@ -109,55 +68,36 @@ export default {
     },
     methods: {
         toggleNav() {
-            this.active = !this.active;
+            this.isMobileExpanded = !this.isMobileExpanded;
         },
         closeNav() {
-            this.active = false;
+            this.isMobileExpanded = false;
         },
-        registerModal() {
-            this.showLogin = false;
-            this.showForm = true;
-            this.showRegister = true;
-        },
-        loginModal() {
-            this.showRegister = false;
-            this.showForm = true;
-            this.showLogin = true;
-        },
-        signOut(){
-            UserApi.logOut()
-                .then(response => console.log(response))
-                .catch(error => {
-                    console.log(error);
-                })
-            EventBus.$emit('logged-out');
-        }
     },
     created(){
         EventBus.$on('logged-in', () =>{
             this.username = localStorage.getItem('username');
             this.isLoggedIn = true;
             this.closeNav();
-            this.showForm = false;
-            this.showLogin = false;
-            this.showRegister = false;
         });
         EventBus.$on('logged-out', () =>{
-            localStorage.setItem('username', '');
-            localStorage.setItem('jwt', '');
             this.username = "";
             this.isLoggedIn = false;
             this.closeNav();
-            this.showForm = false;
-            this.showLogin = false;
-            this.showRegister = false;
         });
     },
     mounted(){
-        if(localStorage.getItem('username')){
-            this.isLoggedIn = true;
-            this.username = localStorage.getItem('username');
-        }
+        UserApi.getLoggedInUser()
+            .then(response =>{
+                this.isLoggedIn = true;
+                this.username = response.name;
+                localStorage.setItem("username", response.name);
+            })
+            .catch(error => {
+                this.isLoggedIn = false;
+                localStorage.removeItem("username");
+                localStorage.removeItem("jwt");
+            })
     }
 };
 </script>

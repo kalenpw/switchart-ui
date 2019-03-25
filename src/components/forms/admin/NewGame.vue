@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { EventBus } from "@/event-bus.js";
+import EventBus from "@/event-bus.js";
 import GameApi from "@/api/games.js";
 
 export default {

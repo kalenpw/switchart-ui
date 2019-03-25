@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { EventBus } from "@/event-bus.js";
+import EventBus from "@/event-bus.js";
 import ArtworkApi from "@/api/artworks.js";
 import UserApi from "@/api/users.js";
 import { getImageUrl } from "@/Utils/url-utils.js";
