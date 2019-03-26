@@ -9,9 +9,11 @@
             </div>
         </section>
 
-        <div class="columns is-centered">
-            <button @click="sortByDate" class="button">Recent</button>
-            <button @click="sortByPopular" class="button">Popular</button>
+        <div class="section columns is-centered">
+            <div class="column has-text-centered">
+                <button @click="sortByDate" class="button">Recent</button>
+                <button @click="sortByPopular" class="button">Popular</button>
+            </div>
         </div>
 
         <div v-if="artworks" class="columns is-multiline section">

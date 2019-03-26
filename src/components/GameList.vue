@@ -1,9 +1,11 @@
 <template>
     <div>
         <div class="columns is-centered">
-            <button @click="sortAlphabetically" class="button">Alphabetical</button>
-            <button @click="sortByDate" class="button">Recent</button>
-            <button @click="sortByPopular" class="button">Popular</button>
+            <div class="column has-text-centered">
+                <button @click="sortAlphabetically" class="button">Alphabetical</button>
+                <button @click="sortByDate" class="button">Recent</button>
+                <button @click="sortByPopular" class="button">Popular</button>
+            </div>
         </div>
         <div class="columns is-multiline" v-if="games">
             <Game
