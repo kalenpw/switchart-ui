@@ -36,7 +36,7 @@
         </div>
         <div class="columns is-multiline">
             <Game
-                class="column is-one-quarter"
+                class="column is-half-tablet is-one-quarter-desktop"
                 v-for="game in games.visibleItems"
                 :key="game.name"
                 :game="game"

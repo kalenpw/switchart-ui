@@ -38,7 +38,7 @@
             <Artwork
                 v-for="artwork in artworks.visibleItems"
                 v-bind:key="artwork.id"
-                class="column is-one-quarter"
+                class="column is-one-quarter-desktop is-half-tablet"
                 :id="artwork.id"
             ></Artwork>
 
@@ -107,4 +107,7 @@ export default {
 </script>
 
 <style scoped>
+i {
+    padding-left: 5px;
+}
 </style>
