@@ -48,7 +48,7 @@
 
 <script>
 import GameApi from "@/api/games.js";
-import { EventBus } from "@/event-bus.js";
+import EventBus from "@/event-bus.js";
 
 export default {
     name: "EditGame",
