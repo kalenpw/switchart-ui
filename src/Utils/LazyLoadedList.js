@@ -10,7 +10,7 @@ class LazyLoadedList {
     }
 
     loadItems() {
-        this.visibleItems = this.allItems.slice(0, this.amoutLoaded);
+        this.visibleItems = this.allItems.slice(0, this.amountLoaded);
     }
 
     loadMore() {

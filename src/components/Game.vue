@@ -3,7 +3,10 @@
         <router-link :to="'/game/' + gameUrl">
             <div class="card">
                 <header class="card-header">
-                    <p class="card-header-title">{{game.name}}</p>
+                    <p class="card-header-title">
+                        <span>{{game.name}}</span>
+                        <span class="tag is-warning is-rounded is-pulled-right">{{game.artworks.length}}</span>
+                    </p>
                 </header>
                 <div class="card-image">
                     <figure class="image is-2by1">
@@ -62,5 +65,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.tag{
+    margin-left: 10px;
+}
 </style>

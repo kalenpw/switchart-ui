@@ -4,7 +4,7 @@
             <i class="fab fa-nintendo-switch" aria-hidden="true"></i>
         </span>
         {{game.name}}
-        <span class="badge">{{game.artworks.length}}</span>
+        <span class="tag is-warning is-rounded">{{game.artworks.length}}</span>
     </a>
 </template>
 
@@ -30,10 +30,7 @@ export default {
 </script>
 
 <style scoped>
-.badge {
+.tag {
     margin-left: 10px;
-    padding: 2px;
-    border-radius: 100%;
-    background-color: #ffdd57;
 }
 </style>
