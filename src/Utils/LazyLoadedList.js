@@ -1,7 +1,7 @@
 class LazyLoadedList {
     allItems = [];
     visibleItems = [];
-    amoutLoaded = 8;
+    amountLoaded = 8;
     lastSortedBy = null;
 
     constructor(allItems) {
@@ -14,12 +14,12 @@ class LazyLoadedList {
     }
 
     loadMore() {
-        this.amoutLoaded = this.amoutLoaded + 8;
+        this.amountLoaded = this.amountLoaded + 8;
         this.loadItems();
     }
 
     hasLoadedAll() {
-        return this.amoutLoaded > this.allItems.length;
+        return this.amountLoaded > this.allItems.length;
     }
 
     sortBy(sortMethod) {
