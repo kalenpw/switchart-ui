@@ -11,8 +11,26 @@
 
         <div class="section columns is-centered">
             <div class="column has-text-centered">
-                <button @click="sortByDate" class="button">Recent</button>
-                <button @click="sortByPopular" class="button">Popular</button>
+                <button
+                    :class="artworks.isSortedDate() ? 'is-warning' : ''"
+                    @click="sortByDate"
+                    class="button"
+                >
+                    Recent
+                    <i
+                        :class="artworks.isReverseSorted && artworks.isSortedDate() ? 'fas fa-caret-up' : 'fas fa-caret-down'"
+                    ></i>
+                </button>
+                <button
+                    :class="artworks.isSortedPopular() ? 'is-warning' : ''"
+                    @click="sortByPopular"
+                    class="button"
+                >
+                    Popular
+                    <i
+                        :class="artworks.isReverseSorted  && artworks.isSortedPopular() ? 'fas fa-caret-up' : 'fas fa-caret-down'"
+                    ></i>
+                </button>
             </div>
         </div>
 
@@ -60,7 +78,7 @@ export default {
                 response => {
                     console.log(response);
                     this.artworks = new LazyLoadedList(response);
-                    this.artworks.reverse();
+                    this.artworks.sortBy(dateSort);
                 }
             );
         },

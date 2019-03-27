@@ -12,3 +12,14 @@ test("Loads lazily", () =>{
     expect(list.visibleItems.length).toBe(10);
     expect(list.amountLoaded).toBe(16);
 });
+
+test("load all works", () =>{
+    let dummyArray = [];
+    for(let i = 0; i < 100; i++){
+        dummyArray.push(i);
+    }
+    let list = new LazyLoadedList(dummyArray);
+    expect(list.visibleItems.length).toBe(8);
+    list.loadAll();
+    expect(list.visibleItems.length).toBe(dummyArray.length);
+});

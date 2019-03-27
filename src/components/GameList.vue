@@ -1,13 +1,40 @@
 <template>
-    <div>
+    <div v-if="games">
         <div class="columns is-centered">
             <div class="column has-text-centered">
-                <button @click="sortAlphabetically" class="button">Alphabetical</button>
-                <button @click="sortByDate" class="button">Recent</button>
-                <button @click="sortByPopular" class="button">Popular</button>
+                <button
+                    :class="games.isSortedAlphabetically() ? 'is-warning' : ''"
+                    @click="sortAlphabetically"
+                    class="button"
+                >
+                    Alphabetical
+                    <i
+                        :class="games.isReverseSorted && games.isSortedAlphabetically() ? 'fas fa-caret-up' : 'fas fa-caret-down'"
+                    ></i>
+                </button>
+                <button
+                    :class="games.isSortedDate() ? 'is-warning' : ''"
+                    @click="sortByDate"
+                    class="button"
+                >
+                    Recent
+                    <i
+                        :class="games.isReverseSorted && games.isSortedDate() ? 'fas fa-caret-up' : 'fas fa-caret-down'"
+                    ></i>
+                </button>
+                <button
+                    :class="games.isSortedPopular() ? 'is-warning' : ''"
+                    @click="sortByPopular"
+                    class="button"
+                >
+                    Popular
+                    <i
+                        :class="games.isReverseSorted  && games.isSortedPopular() ? 'fas fa-caret-up' : 'fas fa-caret-down'"
+                    ></i>
+                </button>
             </div>
         </div>
-        <div class="columns is-multiline" v-if="games">
+        <div class="columns is-multiline">
             <Game
                 class="column is-one-quarter"
                 v-for="game in games.visibleItems"
@@ -39,7 +66,8 @@ export default {
     props: {},
     data() {
         return {
-            games: null
+            games: null,
+            isReverse: false,
         };
     },
 
@@ -62,7 +90,13 @@ export default {
         },
         sortByPopular() {
             this.games.sortBy(popularSort);
-        }
+        },
     }
 };
 </script>
+
+<style scoped>
+i{
+    padding-left: 5px;
+}
+</style>

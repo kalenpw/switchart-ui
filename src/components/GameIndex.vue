@@ -16,9 +16,18 @@
             </p>
         </div>
         <p class="panel-tabs">
-            <a :class="isAlphSort ? 'is-active' : ''" @click="sortAlphabetical">Alphabetical<i :class="alphabeticalArrow"></i></a>
-            <a :class="isRecentSort ? 'is-active' : ''" @click="sortRecent">Latest<i :class="recentArrow"></i></a>
-            <a :class="isPopularSort ? 'is-active' : ''" @click="sortPopular">Popular<i :class="popularArrow"></i></a>
+            <a :class="isAlphSort ? 'is-active' : ''" @click="sortAlphabetical">
+                Alphabetical
+                <i :class="alphabeticalArrow"></i>
+            </a>
+            <a :class="isRecentSort ? 'is-active' : ''" @click="sortRecent">
+                Latest
+                <i :class="recentArrow"></i>
+            </a>
+            <a :class="isPopularSort ? 'is-active' : ''" @click="sortPopular">
+                Popular
+                <i :class="popularArrow"></i>
+            </a>
         </p>
         <GameIndexItem v-for="game in games" v-bind:key="game.id" :game="game"></GameIndexItem>
     </nav>
@@ -48,9 +57,9 @@ export default {
             isAlphSort: true,
             isRecentSort: false,
             isPopularSort: false,
-            alphabeticalArrow: 'fas fa-caret-down',
-            recentArrow: 'fas fa-caret-down',
-            popularArrow: 'fas fa-caret-down'
+            alphabeticalArrow: "fas fa-caret-down",
+            recentArrow: "fas fa-caret-down",
+            popularArrow: "fas fa-caret-down"
         };
     },
     computed: {
@@ -64,7 +73,6 @@ export default {
             .then(games => {
                 this.games = games;
                 this.allGames = this.games;
-                console.log(games);
             })
             .catch(error => console.log(error))
             .finally(() => {});
@@ -103,46 +111,39 @@ export default {
                 this.games = this.allGames.slice().sort(popularSort);
             }
         },
-        toggleArrow(sortMethod){
-            const ARROW_UP_CLASS = 'fas fa-caret-up';
-            const ARROW_DOWN_CLASS= 'fas fa-caret-down';
+        toggleArrow(sortMethod) {
+            const ARROW_UP_CLASS = "fas fa-caret-up";
+            const ARROW_DOWN_CLASS = "fas fa-caret-down";
             if (sortMethod == "alphabetical") {
-                if(this.alphabeticalArrow == ARROW_UP_CLASS){
+                if (this.alphabeticalArrow == ARROW_UP_CLASS) {
                     this.alphabeticalArrow = ARROW_DOWN_CLASS;
-                }
-                else{
+                } else {
                     this.alphabeticalArrow = ARROW_UP_CLASS;
                 }
             } else if (sortMethod == "popular") {
-                if(this.popularArrow == ARROW_UP_CLASS){
+                if (this.popularArrow == ARROW_UP_CLASS) {
                     this.popularArrow = ARROW_DOWN_CLASS;
-                }
-                else{
+                } else {
                     this.popularArrow = ARROW_UP_CLASS;
                 }
             } else if (sortMethod == "recent") {
-                if(this.recentArrow == ARROW_UP_CLASS){
+                if (this.recentArrow == ARROW_UP_CLASS) {
                     this.recentArrow = ARROW_DOWN_CLASS;
-                }
-                else{
+                } else {
                     this.recentArrow = ARROW_UP_CLASS;
                 }
             }
         },
         toggleSortStates(activeSort) {
+            this.isAlphSort = false;
+            this.isRecentSort = false;
+            this.isPopularSort = false;
             if (activeSort == "alphabetical") {
                 this.isAlphSort = true;
-                this.isRecentSort = false;
-                this.isPopularSort = false;
-
             } else if (activeSort == "popular") {
-                this.isAlphSort = false;
-                this.isRecentSort = false;
                 this.isPopularSort = true;
             } else if (activeSort == "recent") {
-                this.isAlphSort = false;
                 this.isRecentSort = true;
-                this.isPopularSort = false;
             }
         }
     }
@@ -150,7 +151,7 @@ export default {
 </script>
 
 <style scoped>
-.panel-tabs a i{
+.panel-tabs a i {
     padding-left: 4px;
 }
 </style>

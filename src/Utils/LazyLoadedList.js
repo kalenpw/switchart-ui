@@ -1,8 +1,13 @@
+import { dateSort } from "@/Utils/sorting-utils.js";
+import { alphabeticalSort } from "@/Utils/sorting-utils.js";
+import { popularSort } from "@/Utils/sorting-utils.js";
+
 class LazyLoadedList {
     allItems = [];
     visibleItems = [];
     amountLoaded = 8;
     lastSortedBy = null;
+    isReverseSorted = false;
 
     constructor(allItems) {
         this.allItems = allItems;
@@ -18,6 +23,11 @@ class LazyLoadedList {
         this.loadItems();
     }
 
+    loadAll() {
+        this.amountLoaded = this.allItems.length;
+        this.loadItems();
+    }
+
     hasLoadedAll() {
         return this.amountLoaded > this.allItems.length;
     }
@@ -27,6 +37,7 @@ class LazyLoadedList {
             this.reverse();
         }
         else {
+            this.isReverseSorted = false;
             this.allItems.sort(sortMethod);
             this.lastSortedBy = sortMethod;
             this.loadItems();
@@ -34,8 +45,18 @@ class LazyLoadedList {
     }
 
     reverse() {
+        this.isReverseSorted = ! this.isReverseSorted;
         this.allItems.reverse();
         this.loadItems();
+    }
+    isSortedAlphabetically(){
+        return this.lastSortedBy == alphabeticalSort;
+    }
+    isSortedDate(){
+        return this.lastSortedBy == dateSort;
+    }
+    isSortedPopular(){
+        return this.lastSortedBy == popularSort;
     }
 }
 
