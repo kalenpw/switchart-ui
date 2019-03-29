@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="artworks">
         <section class="hero is-warning background">
             <div class="hero-body">
                 <div v-if="game" class="container">
@@ -76,7 +76,6 @@ export default {
         refreshArtworks() {
             ArtworkApi.getArtworksByGame(this.$route.params.id).then(
                 response => {
-                    console.log(response);
                     this.artworks = new LazyLoadedList(response);
                     this.artworks.sortBy(dateSort);
                 }
